@@ -253,8 +253,8 @@ ScrollingFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 ScrollingFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 ScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ScrollingFrame.BorderSizePixel = 0
-ScrollingFrame.Position = UDim2.new(0.500242889, 0, 0.498767704, 0)
-ScrollingFrame.Size = UDim2.new(1.00362289, 0, 0.999753058, 0)
+ScrollingFrame.Position = UDim2.new(0.5, 0, 0.5, 0) -- will this work?
+ScrollingFrame.Size = UDim2.new(0.95, 0, 0.95, 0)
 
 UIListLayout_2.Parent = ScrollingFrame
 UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
