@@ -1403,7 +1403,7 @@ local function KNSHF_fake_script() -- TextButton_15.LocalScript
 	local script = Instance.new('LocalScript', TextButton_15)
 
 	local button = script.Parent
-	local sound = button:WaitForChild("Sound")
+	-- local sound = button:WaitForChild("Sound")
 	
 	-- Find your main hidden window frame
 	local screenGui = button.Parent
@@ -1413,7 +1413,7 @@ local function KNSHF_fake_script() -- TextButton_15.LocalScript
 	button.MouseButton1Click:Connect(function()
 		-- Only play the sound if the frame is currently invisible (closed)
 		if not mainFrame.Visible then
-			sound:Play()
+			-- sound:Play() {this used to cause infinite yields, hopefully this fixes why the gui isnt opening.}
 		end
 	
 		-- Toggle the visibility of the frame
