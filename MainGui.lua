@@ -82,6 +82,7 @@ local TextLabel_22 = Instance.new("TextLabel")
 local TextLabel_23 = Instance.new("TextLabel")
 local TextButton_15 = Instance.new("TextButton")
 local UICorner_2 = Instance.new("UICorner")
+local UITextSizeConstraint_25 = Instance.new("UITextSizeConstraint")
 
 --Properties:
 
@@ -241,7 +242,7 @@ Main.AnchorPoint = Vector2.new(0.5, 0.5)
 Main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Main.BorderSizePixel = 0
-Main.Position = UDim2.new(0, 402, 0, 287)
+Main.Position = UDim2.new(0.716268003, 0, 0.530009091, 0)
 Main.Size = UDim2.new(0.84482038, 0, 0.936749816, 0)
 Main.Visible = false
 Main.ZIndex = 2
@@ -851,19 +852,24 @@ TextButton_15.AnchorPoint = Vector2.new(0.5, 0.5)
 TextButton_15.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 TextButton_15.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TextButton_15.BorderSizePixel = 0
-TextButton_15.Position = UDim2.new(0.492519438, 0, 0.0378310233, 0)
-TextButton_15.Size = UDim2.new(0, 60, 0, 60)
+TextButton_15.Position = UDim2.new(0.492519438, 30, 0.0378310233, 29)
+TextButton_15.Size = UDim2.new(0.0425230339, 0, 0.0756620392, 0)
 TextButton_15.Font = Enum.Font.Gotham
 TextButton_15.Text = "p"
 TextButton_15.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_15.TextScaled = true
 TextButton_15.TextSize = 50.000
 TextButton_15.TextWrapped = true
 
 UICorner_2.Parent = TextButton_15
 
+UITextSizeConstraint_25.Parent = TextButton_15
+UITextSizeConstraint_25.MaxTextSize = 40
+UITextSizeConstraint_25.MinTextSize = 8
+
 -- Scripts:
 
-local function RBIQULC_fake_script() -- TextButton.LocalScript 
+local function JVGIR_fake_script() -- TextButton.LocalScript 
 	local script = Instance.new('LocalScript', TextButton)
 
 	local button = script.Parent
@@ -877,8 +883,8 @@ local function RBIQULC_fake_script() -- TextButton.LocalScript
 	
 	
 end
-coroutine.wrap(RBIQULC_fake_script)()
-local function MWJDNP_fake_script() -- TextLabel_3.LocalScript 
+coroutine.wrap(JVGIR_fake_script)()
+local function MKEALQ_fake_script() -- TextLabel_3.LocalScript 
 	local script = Instance.new('LocalScript', TextLabel_3)
 
 	local textLabel = script.Parent
@@ -894,8 +900,8 @@ local function MWJDNP_fake_script() -- TextLabel_3.LocalScript
 	
 	
 end
-coroutine.wrap(MWJDNP_fake_script)()
-local function APND_fake_script() -- TextButton_7.LocalScript 
+coroutine.wrap(MKEALQ_fake_script)()
+local function EUGBBT_fake_script() -- TextButton_7.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_7)
 
 	local button = script.Parent
@@ -928,8 +934,8 @@ local function APND_fake_script() -- TextButton_7.LocalScript
 	
 	
 end
-coroutine.wrap(APND_fake_script)()
-local function YCSIUQ_fake_script() -- TextButton_8.LocalScript 
+coroutine.wrap(EUGBBT_fake_script)()
+local function ROKZWIC_fake_script() -- TextButton_8.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_8)
 
 	local button = script.Parent
@@ -1003,8 +1009,8 @@ local function YCSIUQ_fake_script() -- TextButton_8.LocalScript
 	
 	
 end
-coroutine.wrap(YCSIUQ_fake_script)()
-local function AALBYKZ_fake_script() -- TextButton_9.LocalScript 
+coroutine.wrap(ROKZWIC_fake_script)()
+local function HITEDN_fake_script() -- TextButton_9.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_9)
 
 	local button = script.Parent
@@ -1038,8 +1044,8 @@ local function AALBYKZ_fake_script() -- TextButton_9.LocalScript
 	
 	
 end
-coroutine.wrap(AALBYKZ_fake_script)()
-local function LQMNIKI_fake_script() -- TextButton_10.LocalScript 
+coroutine.wrap(HITEDN_fake_script)()
+local function QLKIGMY_fake_script() -- TextButton_10.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_10)
 
 	local button = script.Parent
@@ -1130,8 +1136,8 @@ local function LQMNIKI_fake_script() -- TextButton_10.LocalScript
 	
 	
 end
-coroutine.wrap(LQMNIKI_fake_script)()
-local function ADRXMU_fake_script() -- TextButton_11.LocalScript 
+coroutine.wrap(QLKIGMY_fake_script)()
+local function EQNWE_fake_script() -- TextButton_11.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_11)
 
 	local button = script.Parent
@@ -1180,8 +1186,8 @@ local function ADRXMU_fake_script() -- TextButton_11.LocalScript
 	
 	
 end
-coroutine.wrap(ADRXMU_fake_script)()
-local function NDELHXX_fake_script() -- TextButton_12.LocalScript 
+coroutine.wrap(EQNWE_fake_script)()
+local function UCYL_fake_script() -- TextButton_12.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_12)
 
 	local UserInputService = game:GetService("UserInputService")
@@ -1260,8 +1266,8 @@ local function NDELHXX_fake_script() -- TextButton_12.LocalScript
 	
 	
 end
-coroutine.wrap(NDELHXX_fake_script)()
-local function PXRMBI_fake_script() -- TextButton_13.LocalScript 
+coroutine.wrap(UCYL_fake_script)()
+local function SIIMUF_fake_script() -- TextButton_13.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_13)
 
 	local UserInputService = game:GetService("UserInputService")
@@ -1340,8 +1346,8 @@ local function PXRMBI_fake_script() -- TextButton_13.LocalScript
 	
 	
 end
-coroutine.wrap(PXRMBI_fake_script)()
-local function GFKIWHX_fake_script() -- TextButton_14.LocalScript 
+coroutine.wrap(SIIMUF_fake_script)()
+local function PIJLZJ_fake_script() -- TextButton_14.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_14)
 
 	local button = script.Parent
@@ -1376,8 +1382,8 @@ local function GFKIWHX_fake_script() -- TextButton_14.LocalScript
 	end)
 	
 end
-coroutine.wrap(GFKIWHX_fake_script)()
-local function ZZUQY_fake_script() -- TextButton_15.LocalScript 
+coroutine.wrap(PIJLZJ_fake_script)()
+local function UNAZRPJ_fake_script() -- TextButton_15.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_15)
 
 	local button = script.Parent
@@ -1398,12 +1404,12 @@ local function ZZUQY_fake_script() -- TextButton_15.LocalScript
 	
 	
 end
-coroutine.wrap(ZZUQY_fake_script)()
-local function KNSHF_fake_script() -- TextButton_15.LocalScript 
+coroutine.wrap(UNAZRPJ_fake_script)()
+local function YABEW_fake_script() -- TextButton_15.LocalScript 
 	local script = Instance.new('LocalScript', TextButton_15)
 
 	local button = script.Parent
-	-- local sound = button:WaitForChild("Sound")
+	-- local sound = button:WaitForChild("Sound") avoids the infinite yield.
 	
 	-- Find your main hidden window frame
 	local screenGui = button.Parent
@@ -1413,7 +1419,7 @@ local function KNSHF_fake_script() -- TextButton_15.LocalScript
 	button.MouseButton1Click:Connect(function()
 		-- Only play the sound if the frame is currently invisible (closed)
 		if not mainFrame.Visible then
-			-- sound:Play() {this used to cause infinite yields, hopefully this fixes why the gui isnt opening.}
+			-- sound:Play() this causes problems
 		end
 	
 		-- Toggle the visibility of the frame
@@ -1421,4 +1427,5 @@ local function KNSHF_fake_script() -- TextButton_15.LocalScript
 	end)
 	
 end
-coroutine.wrap(KNSHF_fake_script)()
+coroutine.wrap(YABEW_fake_script)()
+-- New rewrite
