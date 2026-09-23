@@ -1,877 +1,1219 @@
--- Gui to Lua
--- Version: 3.2
-
--- Instances:
-
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local UICorner = Instance.new("UICorner")
-local TextLabel = Instance.new("TextLabel")
-local Frame_2 = Instance.new("Frame")
-local TextButton = Instance.new("TextButton")
-local TextButton_2 = Instance.new("TextButton")
-local TextButton_3 = Instance.new("TextButton")
-local TextButton_4 = Instance.new("TextButton")
-local TextButton_5 = Instance.new("TextButton")
-local UIListLayout = Instance.new("UIListLayout")
-local TextButton_6 = Instance.new("TextButton")
-local TextLabel_2 = Instance.new("TextLabel")
-local TextLabel_3 = Instance.new("TextLabel")
-local Main = Instance.new("Frame")
-local ScrollingFrame = Instance.new("ScrollingFrame")
-local UIListLayout_2 = Instance.new("UIListLayout")
-local Frame_3 = Instance.new("Frame")
-local TextLabel_4 = Instance.new("TextLabel")
-local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
-local TextLabel_5 = Instance.new("TextLabel")
-local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
-local TextButton_7 = Instance.new("TextButton")
-local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
-local Frame_4 = Instance.new("Frame")
-local TextLabel_6 = Instance.new("TextLabel")
-local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
-local TextLabel_7 = Instance.new("TextLabel")
-local UITextSizeConstraint_5 = Instance.new("UITextSizeConstraint")
-local TextButton_8 = Instance.new("TextButton")
-local UITextSizeConstraint_6 = Instance.new("UITextSizeConstraint")
-local Frame_5 = Instance.new("Frame")
-local TextLabel_8 = Instance.new("TextLabel")
-local UITextSizeConstraint_7 = Instance.new("UITextSizeConstraint")
-local TextLabel_9 = Instance.new("TextLabel")
-local UITextSizeConstraint_8 = Instance.new("UITextSizeConstraint")
-local TextButton_9 = Instance.new("TextButton")
-local UITextSizeConstraint_9 = Instance.new("UITextSizeConstraint")
-local Frame_6 = Instance.new("Frame")
-local TextLabel_10 = Instance.new("TextLabel")
-local UITextSizeConstraint_10 = Instance.new("UITextSizeConstraint")
-local TextLabel_11 = Instance.new("TextLabel")
-local UITextSizeConstraint_11 = Instance.new("UITextSizeConstraint")
-local TextButton_10 = Instance.new("TextButton")
-local UITextSizeConstraint_12 = Instance.new("UITextSizeConstraint")
-local Frame_7 = Instance.new("Frame")
-local TextLabel_12 = Instance.new("TextLabel")
-local UITextSizeConstraint_13 = Instance.new("UITextSizeConstraint")
-local TextLabel_13 = Instance.new("TextLabel")
-local UITextSizeConstraint_14 = Instance.new("UITextSizeConstraint")
-local TextButton_11 = Instance.new("TextButton")
-local UITextSizeConstraint_15 = Instance.new("UITextSizeConstraint")
-local Frame_8 = Instance.new("Frame")
-local TextLabel_14 = Instance.new("TextLabel")
-local UITextSizeConstraint_16 = Instance.new("UITextSizeConstraint")
-local TextLabel_15 = Instance.new("TextLabel")
-local UITextSizeConstraint_17 = Instance.new("UITextSizeConstraint")
-local TextButton_12 = Instance.new("TextButton")
-local UITextSizeConstraint_18 = Instance.new("UITextSizeConstraint")
-local Frame_9 = Instance.new("Frame")
-local TextLabel_16 = Instance.new("TextLabel")
-local UITextSizeConstraint_19 = Instance.new("UITextSizeConstraint")
-local TextLabel_17 = Instance.new("TextLabel")
-local UITextSizeConstraint_20 = Instance.new("UITextSizeConstraint")
-local TextButton_13 = Instance.new("TextButton")
-local UITextSizeConstraint_21 = Instance.new("UITextSizeConstraint")
-local Frame_10 = Instance.new("Frame")
-local TextLabel_18 = Instance.new("TextLabel")
-local UITextSizeConstraint_22 = Instance.new("UITextSizeConstraint")
-local TextLabel_19 = Instance.new("TextLabel")
-local UITextSizeConstraint_23 = Instance.new("UITextSizeConstraint")
-local TextButton_14 = Instance.new("TextButton")
-local UITextSizeConstraint_24 = Instance.new("UITextSizeConstraint")
-local TextLabel_20 = Instance.new("TextLabel")
-local TextLabel_21 = Instance.new("TextLabel")
-local TextLabel_22 = Instance.new("TextLabel")
-local TextLabel_23 = Instance.new("TextLabel")
-local TextButton_15 = Instance.new("TextButton")
-local UICorner_2 = Instance.new("UICorner")
-local UITextSizeConstraint_25 = Instance.new("UITextSizeConstraint")
-
---Properties:
-
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-Frame.Parent = ScreenGui
-Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.29054451, 350, 0.158890292, 270)
-Frame.Size = UDim2.new(0.419150442, 0, 0.682850063, 0)
-Frame.Visible = false
-
-UICorner.Parent = Frame
-
-TextLabel.Parent = Frame
-TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.BorderSizePixel = 0
-TextLabel.Position = UDim2.new(0.499714166, 0, 0.0258541033, 0)
-TextLabel.Size = UDim2.new(0.999428332, 0, 0.0535549261, 0)
-TextLabel.Font = Enum.Font.Gotham
-TextLabel.Text = "Bstlar's Gui"
-TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.TextScaled = true
-TextLabel.TextSize = 14.000
-TextLabel.TextWrapped = true
-
-Frame_2.Parent = Frame
-Frame_2.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_2.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_2.BorderSizePixel = 0
-Frame_2.ClipsDescendants = true
-Frame_2.Position = UDim2.new(0.071387738, 0, 0.531855822, 0)
-Frame_2.Size = UDim2.new(0.142775476, 0, 0.934441149, 0)
-
-TextButton.Parent = Frame_2
-TextButton.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextButton.BackgroundTransparency = 1.000
-TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton.BorderSizePixel = 0
-TextButton.Position = UDim2.new(0, 50, 0, 26)
-TextButton.Size = UDim2.new(1, 0, 0.102766797, 0)
-TextButton.Font = Enum.Font.Gotham
-TextButton.Text = "Main"
-TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton.TextScaled = true
-TextButton.TextSize = 14.000
-TextButton.TextWrapped = true
-
-TextButton_2.Parent = Frame_2
-TextButton_2.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextButton_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_2.BorderSizePixel = 0
-TextButton_2.Position = UDim2.new(0, 0, 0.1015625, 0)
-TextButton_2.Size = UDim2.new(0, 100, 0, 52)
-TextButton_2.Font = Enum.Font.Gotham
-TextButton_2.Text = "Teleportation"
-TextButton_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_2.TextScaled = true
-TextButton_2.TextSize = 14.000
-TextButton_2.TextWrapped = true
-
-TextButton_3.Parent = Frame_2
-TextButton_3.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextButton_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_3.BorderSizePixel = 0
-TextButton_3.Position = UDim2.new(0, 0, 0.203125, 0)
-TextButton_3.Size = UDim2.new(0, 100, 0, 52)
-TextButton_3.Font = Enum.Font.Gotham
-TextButton_3.Text = "Local Player"
-TextButton_3.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_3.TextScaled = true
-TextButton_3.TextSize = 14.000
-TextButton_3.TextWrapped = true
-
-TextButton_4.Parent = Frame_2
-TextButton_4.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextButton_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_4.BorderSizePixel = 0
-TextButton_4.Position = UDim2.new(0, 0, 0.3046875, 0)
-TextButton_4.Size = UDim2.new(0, 100, 0, 52)
-TextButton_4.Font = Enum.Font.Gotham
-TextButton_4.Text = "Autofarm"
-TextButton_4.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_4.TextScaled = true
-TextButton_4.TextSize = 14.000
-TextButton_4.TextWrapped = true
-
-TextButton_5.Parent = Frame_2
-TextButton_5.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextButton_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_5.BorderSizePixel = 0
-TextButton_5.Position = UDim2.new(0, 0, 0.40625, 0)
-TextButton_5.Size = UDim2.new(0, 100, 0, 52)
-TextButton_5.Font = Enum.Font.Gotham
-TextButton_5.Text = "Fun"
-TextButton_5.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_5.TextScaled = true
-TextButton_5.TextSize = 14.000
-TextButton_5.TextWrapped = true
-
-UIListLayout.Parent = Frame_2
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-TextButton_6.Parent = Frame_2
-TextButton_6.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextButton_6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_6.BorderSizePixel = 0
-TextButton_6.Position = UDim2.new(0, 0, 0.40625, 0)
-TextButton_6.Size = UDim2.new(0, 100, 0, 52)
-TextButton_6.Font = Enum.Font.Gotham
-TextButton_6.Text = "Donate"
-TextButton_6.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_6.TextScaled = true
-TextButton_6.TextSize = 14.000
-TextButton_6.TextWrapped = true
-
-TextLabel_2.Parent = Frame
-TextLabel_2.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_2.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextLabel_2.BackgroundTransparency = 1.000
-TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_2.BorderSizePixel = 0
-TextLabel_2.Position = UDim2.new(0.498286426, 0, 1.01200342, 0)
-TextLabel_2.Size = UDim2.new(0.983723044, 0, 0.0258541033, 0)
-TextLabel_2.Font = Enum.Font.Gotham
-TextLabel_2.Text = "no key system needed"
-TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_2.TextScaled = true
-TextLabel_2.TextSize = 14.000
-TextLabel_2.TextWrapped = true
-
-TextLabel_3.Parent = Frame
-TextLabel_3.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_3.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextLabel_3.BackgroundTransparency = 1.000
-TextLabel_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_3.BorderSizePixel = 0
-TextLabel_3.Position = UDim2.new(0.575385153, 0, 0.0886426419, 0)
-TextLabel_3.Size = UDim2.new(0.739576995, 0, 0.0498614833, 0)
-TextLabel_3.Font = Enum.Font.Gotham
-TextLabel_3.Text = "Welcome, [username]"
-TextLabel_3.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_3.TextScaled = true
-TextLabel_3.TextSize = 14.000
-TextLabel_3.TextWrapped = true
-
-Main.Name = "Main"
-Main.Parent = Frame
-Main.AnchorPoint = Vector2.new(0.5, 0.5)
-Main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Main.BorderSizePixel = 0
-Main.Position = UDim2.new(0.716268003, 0, 0.530009091, 0)
-Main.Size = UDim2.new(0.84482038, 0, 0.936749816, 0)
-Main.Visible = false
-Main.ZIndex = 2
-
-ScrollingFrame.Parent = Main
-ScrollingFrame.Active = true
-ScrollingFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-ScrollingFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-ScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ScrollingFrame.BorderSizePixel = 0
-ScrollingFrame.Position = UDim2.new(0.5, 0, 0.5, 0) -- will this work?
-ScrollingFrame.Size = UDim2.new(0.95, 0, 0.95, 0)
-
-UIListLayout_2.Parent = ScrollingFrame
-UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
-
-Frame_3.Parent = ScrollingFrame
-Frame_3.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_3.BackgroundTransparency = 1.000
-Frame_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_3.BorderSizePixel = 0
-Frame_3.Position = UDim2.new(0, 290, 0, 14)
-Frame_3.Size = UDim2.new(0.978351235, 0, 0.0565688461, 0)
-
-TextLabel_4.Parent = Frame_3
-TextLabel_4.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_4.BackgroundTransparency = 1.000
-TextLabel_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_4.BorderSizePixel = 0
-TextLabel_4.Position = UDim2.new(0, 90, 0, 18)
-TextLabel_4.Size = UDim2.new(0.311531842, 0, 0.510237992, 0)
-TextLabel_4.Font = Enum.Font.Gotham
-TextLabel_4.Text = "Join the discord"
-TextLabel_4.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_4.TextScaled = true
-TextLabel_4.TextSize = 14.000
-TextLabel_4.TextWrapped = true
-
-UITextSizeConstraint.Parent = TextLabel_4
-UITextSizeConstraint.MaxTextSize = 40
-UITextSizeConstraint.MinTextSize = 8
-
-TextLabel_5.Parent = Frame_3
-TextLabel_5.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_5.BackgroundTransparency = 1.000
-TextLabel_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_5.BorderSizePixel = 0
-TextLabel_5.Position = UDim2.new(0, 90, 0, 45)
-TextLabel_5.Size = UDim2.new(0.311531842, 0, -0.257776052, 0)
-TextLabel_5.Font = Enum.Font.Gotham
-TextLabel_5.Text = "Automatically copies the discord link"
-TextLabel_5.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_5.TextScaled = true
-TextLabel_5.TextSize = 14.000
-TextLabel_5.TextWrapped = true
-
-UITextSizeConstraint_2.Parent = TextLabel_5
-UITextSizeConstraint_2.MaxTextSize = 40
-UITextSizeConstraint_2.MinTextSize = 8
-
-TextButton_7.Parent = Frame_3
-TextButton_7.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_7.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_7.BackgroundTransparency = 1.000
-TextButton_7.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_7.BorderSizePixel = 0
-TextButton_7.Position = UDim2.new(0, 478, 0, 27)
-TextButton_7.Size = UDim2.new(0.340791732, 0, 0.879792571, 0)
-TextButton_7.Font = Enum.Font.Gotham
-TextButton_7.Text = "Do it"
-TextButton_7.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_7.TextScaled = true
-TextButton_7.TextSize = 14.000
-TextButton_7.TextWrapped = true
-
-UITextSizeConstraint_3.Parent = TextButton_7
-UITextSizeConstraint_3.MaxTextSize = 40
-UITextSizeConstraint_3.MinTextSize = 8
-
-Frame_4.Parent = ScrollingFrame
-Frame_4.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_4.BackgroundTransparency = 1.000
-Frame_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_4.BorderSizePixel = 0
-Frame_4.Position = UDim2.new(0, 290, 0, 14)
-Frame_4.Size = UDim2.new(0.978351235, 0, 0.0565688461, 0)
-
-TextLabel_6.Parent = Frame_4
-TextLabel_6.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_6.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_6.BackgroundTransparency = 1.000
-TextLabel_6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_6.BorderSizePixel = 0
-TextLabel_6.Position = UDim2.new(0, 90, 0, 18)
-TextLabel_6.Size = UDim2.new(0.311531842, 0, 0.510237992, 0)
-TextLabel_6.Font = Enum.Font.Gotham
-TextLabel_6.Text = "Get game information"
-TextLabel_6.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_6.TextScaled = true
-TextLabel_6.TextSize = 14.000
-TextLabel_6.TextWrapped = true
-
-UITextSizeConstraint_4.Parent = TextLabel_6
-UITextSizeConstraint_4.MaxTextSize = 40
-UITextSizeConstraint_4.MinTextSize = 8
-
-TextLabel_7.Parent = Frame_4
-TextLabel_7.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_7.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_7.BackgroundTransparency = 1.000
-TextLabel_7.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_7.BorderSizePixel = 0
-TextLabel_7.Position = UDim2.new(0, 90, 0, 47)
-TextLabel_7.Size = UDim2.new(0.311531842, 0, -0.327475667, 0)
-TextLabel_7.Font = Enum.Font.Gotham
-TextLabel_7.Text = "Gets the informaton from the current roblox game. [FPS, ping, player count, etc]"
-TextLabel_7.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_7.TextScaled = true
-TextLabel_7.TextSize = 14.000
-TextLabel_7.TextWrapped = true
-
-UITextSizeConstraint_5.Parent = TextLabel_7
-UITextSizeConstraint_5.MaxTextSize = 40
-UITextSizeConstraint_5.MinTextSize = 8
-
-TextButton_8.Parent = Frame_4
-TextButton_8.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_8.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_8.BackgroundTransparency = 1.000
-TextButton_8.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_8.BorderSizePixel = 0
-TextButton_8.Position = UDim2.new(0, 478, 0, 27)
-TextButton_8.Size = UDim2.new(0.340791732, 0, 0.879792571, 0)
-TextButton_8.Font = Enum.Font.Gotham
-TextButton_8.Text = "Do it"
-TextButton_8.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_8.TextScaled = true
-TextButton_8.TextSize = 14.000
-TextButton_8.TextWrapped = true
-
-UITextSizeConstraint_6.Parent = TextButton_8
-UITextSizeConstraint_6.MaxTextSize = 40
-UITextSizeConstraint_6.MinTextSize = 8
-
-Frame_5.Parent = ScrollingFrame
-Frame_5.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_5.BackgroundTransparency = 1.000
-Frame_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_5.BorderSizePixel = 0
-Frame_5.Position = UDim2.new(0, 290, 0, 14)
-Frame_5.Size = UDim2.new(0.978351235, 0, 0.0565688461, 0)
-
-TextLabel_8.Parent = Frame_5
-TextLabel_8.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_8.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_8.BackgroundTransparency = 1.000
-TextLabel_8.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_8.BorderSizePixel = 0
-TextLabel_8.Position = UDim2.new(0, 90, 0, 18)
-TextLabel_8.Size = UDim2.new(0.311531842, 0, 0.510237992, 0)
-TextLabel_8.Font = Enum.Font.Gotham
-TextLabel_8.Text = "Serverhop"
-TextLabel_8.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_8.TextScaled = true
-TextLabel_8.TextSize = 14.000
-TextLabel_8.TextWrapped = true
-
-UITextSizeConstraint_7.Parent = TextLabel_8
-UITextSizeConstraint_7.MaxTextSize = 40
-UITextSizeConstraint_7.MinTextSize = 8
-
-TextLabel_9.Parent = Frame_5
-TextLabel_9.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_9.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_9.BackgroundTransparency = 1.000
-TextLabel_9.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_9.BorderSizePixel = 0
-TextLabel_9.Position = UDim2.new(0, 90, 0, 47)
-TextLabel_9.Size = UDim2.new(0.311531842, 0, -0.327475667, 0)
-TextLabel_9.Font = Enum.Font.Gotham
-TextLabel_9.Text = "Automatically serverhops for you"
-TextLabel_9.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_9.TextScaled = true
-TextLabel_9.TextSize = 14.000
-TextLabel_9.TextWrapped = true
-
-UITextSizeConstraint_8.Parent = TextLabel_9
-UITextSizeConstraint_8.MaxTextSize = 40
-UITextSizeConstraint_8.MinTextSize = 8
-
-TextButton_9.Parent = Frame_5
-TextButton_9.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_9.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_9.BackgroundTransparency = 1.000
-TextButton_9.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_9.BorderSizePixel = 0
-TextButton_9.Position = UDim2.new(0, 478, 0, 27)
-TextButton_9.Size = UDim2.new(0.340791732, 0, 0.879792571, 0)
-TextButton_9.Font = Enum.Font.Gotham
-TextButton_9.Text = "Do it"
-TextButton_9.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_9.TextScaled = true
-TextButton_9.TextSize = 14.000
-TextButton_9.TextWrapped = true
-
-UITextSizeConstraint_9.Parent = TextButton_9
-UITextSizeConstraint_9.MaxTextSize = 40
-UITextSizeConstraint_9.MinTextSize = 8
-
-Frame_6.Parent = ScrollingFrame
-Frame_6.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_6.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_6.BackgroundTransparency = 1.000
-Frame_6.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_6.BorderSizePixel = 0
-Frame_6.Position = UDim2.new(0, 290, 0, 14)
-Frame_6.Size = UDim2.new(0.978351235, 0, 0.0565688461, 0)
-
-TextLabel_10.Parent = Frame_6
-TextLabel_10.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_10.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_10.BackgroundTransparency = 1.000
-TextLabel_10.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_10.BorderSizePixel = 0
-TextLabel_10.Position = UDim2.new(0, 90, 0, 18)
-TextLabel_10.Size = UDim2.new(0.311531842, 0, 0.510237992, 0)
-TextLabel_10.Font = Enum.Font.Gotham
-TextLabel_10.Text = "Anti Lag"
-TextLabel_10.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_10.TextScaled = true
-TextLabel_10.TextSize = 14.000
-TextLabel_10.TextWrapped = true
-
-UITextSizeConstraint_10.Parent = TextLabel_10
-UITextSizeConstraint_10.MaxTextSize = 40
-UITextSizeConstraint_10.MinTextSize = 8
-
-TextLabel_11.Parent = Frame_6
-TextLabel_11.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_11.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_11.BackgroundTransparency = 1.000
-TextLabel_11.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_11.BorderSizePixel = 0
-TextLabel_11.Position = UDim2.new(0, 90, 0, 47)
-TextLabel_11.Size = UDim2.new(0.311531842, 0, -0.327475667, 0)
-TextLabel_11.Font = Enum.Font.Gotham
-TextLabel_11.Text = "Disables all textures, attempting to fix lag."
-TextLabel_11.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_11.TextScaled = true
-TextLabel_11.TextSize = 14.000
-TextLabel_11.TextWrapped = true
-
-UITextSizeConstraint_11.Parent = TextLabel_11
-UITextSizeConstraint_11.MaxTextSize = 40
-UITextSizeConstraint_11.MinTextSize = 8
-
-TextButton_10.Parent = Frame_6
-TextButton_10.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_10.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_10.BackgroundTransparency = 1.000
-TextButton_10.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_10.BorderSizePixel = 0
-TextButton_10.Position = UDim2.new(0, 478, 0, 27)
-TextButton_10.Size = UDim2.new(0.340791732, 0, 0.879792571, 0)
-TextButton_10.Font = Enum.Font.Gotham
-TextButton_10.Text = "Anti Lag: Off"
-TextButton_10.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_10.TextScaled = true
-TextButton_10.TextSize = 14.000
-TextButton_10.TextWrapped = true
-
-UITextSizeConstraint_12.Parent = TextButton_10
-UITextSizeConstraint_12.MaxTextSize = 40
-UITextSizeConstraint_12.MinTextSize = 8
-
-Frame_7.Parent = ScrollingFrame
-Frame_7.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_7.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_7.BackgroundTransparency = 1.000
-Frame_7.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_7.BorderSizePixel = 0
-Frame_7.Position = UDim2.new(0, 290, 0, 14)
-Frame_7.Size = UDim2.new(0.978351235, 0, 0.0565688461, 0)
-
-TextLabel_12.Parent = Frame_7
-TextLabel_12.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_12.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_12.BackgroundTransparency = 1.000
-TextLabel_12.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_12.BorderSizePixel = 0
-TextLabel_12.Position = UDim2.new(0, 90, 0, 18)
-TextLabel_12.Size = UDim2.new(0.311531842, 0, 0.510237992, 0)
-TextLabel_12.Font = Enum.Font.Gotham
-TextLabel_12.Text = "Anti Kick"
-TextLabel_12.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_12.TextScaled = true
-TextLabel_12.TextSize = 14.000
-TextLabel_12.TextWrapped = true
-
-UITextSizeConstraint_13.Parent = TextLabel_12
-UITextSizeConstraint_13.MaxTextSize = 40
-UITextSizeConstraint_13.MinTextSize = 8
-
-TextLabel_13.Parent = Frame_7
-TextLabel_13.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_13.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_13.BackgroundTransparency = 1.000
-TextLabel_13.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_13.BorderSizePixel = 0
-TextLabel_13.Position = UDim2.new(0, 90, 0, 47)
-TextLabel_13.Size = UDim2.new(0.311531842, 0, -0.327475667, 0)
-TextLabel_13.Font = Enum.Font.Gotham
-TextLabel_13.Text = "Attempts to prevent you from being kicked for standing still for too long."
-TextLabel_13.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_13.TextScaled = true
-TextLabel_13.TextSize = 14.000
-TextLabel_13.TextWrapped = true
-
-UITextSizeConstraint_14.Parent = TextLabel_13
-UITextSizeConstraint_14.MaxTextSize = 40
-UITextSizeConstraint_14.MinTextSize = 8
-
-TextButton_11.Parent = Frame_7
-TextButton_11.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_11.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_11.BackgroundTransparency = 1.000
-TextButton_11.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_11.BorderSizePixel = 0
-TextButton_11.Position = UDim2.new(0, 478, 0, 27)
-TextButton_11.Size = UDim2.new(0.340791732, 0, 0.879792571, 0)
-TextButton_11.Font = Enum.Font.Gotham
-TextButton_11.Text = "Anti Kick: Off"
-TextButton_11.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_11.TextScaled = true
-TextButton_11.TextSize = 14.000
-TextButton_11.TextWrapped = true
-
-UITextSizeConstraint_15.Parent = TextButton_11
-UITextSizeConstraint_15.MaxTextSize = 40
-UITextSizeConstraint_15.MinTextSize = 8
-
-Frame_8.Parent = ScrollingFrame
-Frame_8.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_8.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_8.BackgroundTransparency = 1.000
-Frame_8.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_8.BorderSizePixel = 0
-Frame_8.Position = UDim2.new(0, 290, 0, 14)
-Frame_8.Size = UDim2.new(0.978351235, 0, 0.0565688461, 0)
-
-TextLabel_14.Parent = Frame_8
-TextLabel_14.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_14.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_14.BackgroundTransparency = 1.000
-TextLabel_14.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_14.BorderSizePixel = 0
-TextLabel_14.Position = UDim2.new(0, 90, 0, 18)
-TextLabel_14.Size = UDim2.new(0.311531842, 0, 0.510237992, 0)
-TextLabel_14.Font = Enum.Font.Gotham
-TextLabel_14.Text = "Drag Interface"
-TextLabel_14.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_14.TextScaled = true
-TextLabel_14.TextSize = 14.000
-TextLabel_14.TextWrapped = true
-
-UITextSizeConstraint_16.Parent = TextLabel_14
-UITextSizeConstraint_16.MaxTextSize = 40
-UITextSizeConstraint_16.MinTextSize = 8
-
-TextLabel_15.Parent = Frame_8
-TextLabel_15.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_15.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_15.BackgroundTransparency = 1.000
-TextLabel_15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_15.BorderSizePixel = 0
-TextLabel_15.Position = UDim2.new(0, 90, 0, 47)
-TextLabel_15.Size = UDim2.new(0.311531842, 0, -0.327475667, 0)
-TextLabel_15.Font = Enum.Font.Gotham
-TextLabel_15.Text = "Toggle for dragging the interface"
-TextLabel_15.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_15.TextScaled = true
-TextLabel_15.TextSize = 14.000
-TextLabel_15.TextWrapped = true
-
-UITextSizeConstraint_17.Parent = TextLabel_15
-UITextSizeConstraint_17.MaxTextSize = 40
-UITextSizeConstraint_17.MinTextSize = 8
-
-TextButton_12.Parent = Frame_8
-TextButton_12.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_12.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_12.BackgroundTransparency = 1.000
-TextButton_12.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_12.BorderSizePixel = 0
-TextButton_12.Position = UDim2.new(0, 478, 0, 27)
-TextButton_12.Size = UDim2.new(0.340791732, 0, 0.879792571, 0)
-TextButton_12.Font = Enum.Font.Gotham
-TextButton_12.Text = "On"
-TextButton_12.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_12.TextScaled = true
-TextButton_12.TextSize = 14.000
-TextButton_12.TextWrapped = true
-
-UITextSizeConstraint_18.Parent = TextButton_12
-UITextSizeConstraint_18.MaxTextSize = 40
-UITextSizeConstraint_18.MinTextSize = 8
-
-Frame_9.Parent = ScrollingFrame
-Frame_9.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_9.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_9.BackgroundTransparency = 1.000
-Frame_9.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_9.BorderSizePixel = 0
-Frame_9.Position = UDim2.new(0, 290, 0, 14)
-Frame_9.Size = UDim2.new(0.978351235, 0, 0.0565688461, 0)
-
-TextLabel_16.Parent = Frame_9
-TextLabel_16.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_16.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_16.BackgroundTransparency = 1.000
-TextLabel_16.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_16.BorderSizePixel = 0
-TextLabel_16.Position = UDim2.new(0, 90, 0, 18)
-TextLabel_16.Size = UDim2.new(0.311531842, 0, 0.510237992, 0)
-TextLabel_16.Font = Enum.Font.Gotham
-TextLabel_16.Text = "Drag Button"
-TextLabel_16.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_16.TextScaled = true
-TextLabel_16.TextSize = 14.000
-TextLabel_16.TextWrapped = true
-
-UITextSizeConstraint_19.Parent = TextLabel_16
-UITextSizeConstraint_19.MaxTextSize = 40
-UITextSizeConstraint_19.MinTextSize = 8
-
-TextLabel_17.Parent = Frame_9
-TextLabel_17.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_17.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_17.BackgroundTransparency = 1.000
-TextLabel_17.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_17.BorderSizePixel = 0
-TextLabel_17.Position = UDim2.new(0, 90, 0, 47)
-TextLabel_17.Size = UDim2.new(0.311531842, 0, -0.327475667, 0)
-TextLabel_17.Font = Enum.Font.Gotham
-TextLabel_17.Text = "Toggle for dragging the interface"
-TextLabel_17.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_17.TextScaled = true
-TextLabel_17.TextSize = 14.000
-TextLabel_17.TextWrapped = true
-
-UITextSizeConstraint_20.Parent = TextLabel_17
-UITextSizeConstraint_20.MaxTextSize = 40
-UITextSizeConstraint_20.MinTextSize = 8
-
-TextButton_13.Parent = Frame_9
-TextButton_13.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_13.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_13.BackgroundTransparency = 1.000
-TextButton_13.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_13.BorderSizePixel = 0
-TextButton_13.Position = UDim2.new(0, 478, 0, 27)
-TextButton_13.Size = UDim2.new(0.340791732, 0, 0.879792571, 0)
-TextButton_13.Font = Enum.Font.Gotham
-TextButton_13.Text = "On"
-TextButton_13.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_13.TextScaled = true
-TextButton_13.TextSize = 14.000
-TextButton_13.TextWrapped = true
-
-UITextSizeConstraint_21.Parent = TextButton_13
-UITextSizeConstraint_21.MaxTextSize = 40
-UITextSizeConstraint_21.MinTextSize = 8
-
-Frame_10.Parent = ScrollingFrame
-Frame_10.AnchorPoint = Vector2.new(0.5, 0.5)
-Frame_10.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame_10.BackgroundTransparency = 1.000
-Frame_10.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame_10.BorderSizePixel = 0
-Frame_10.Position = UDim2.new(0, 290, 0, 14)
-Frame_10.Size = UDim2.new(0.978351235, 0, 0.0565688461, 0)
-
-TextLabel_18.Parent = Frame_10
-TextLabel_18.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_18.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_18.BackgroundTransparency = 1.000
-TextLabel_18.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_18.BorderSizePixel = 0
-TextLabel_18.Position = UDim2.new(0, 140, 0, 18)
-TextLabel_18.Size = UDim2.new(0.482908666, 0, 0.510237992, 0)
-TextLabel_18.Font = Enum.Font.Gotham
-TextLabel_18.Text = "Replace Button and Interface"
-TextLabel_18.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_18.TextScaled = true
-TextLabel_18.TextSize = 14.000
-TextLabel_18.TextWrapped = true
-
-UITextSizeConstraint_22.Parent = TextLabel_18
-UITextSizeConstraint_22.MaxTextSize = 40
-UITextSizeConstraint_22.MinTextSize = 8
-
-TextLabel_19.Parent = Frame_10
-TextLabel_19.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_19.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_19.BackgroundTransparency = 1.000
-TextLabel_19.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_19.BorderSizePixel = 0
-TextLabel_19.Position = UDim2.new(0, 137, 0, 47)
-TextLabel_19.Size = UDim2.new(0.472430378, 0, -0.327475667, 0)
-TextLabel_19.Font = Enum.Font.Gotham
-TextLabel_19.Text = "Puts both elements into their original spots."
-TextLabel_19.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_19.TextScaled = true
-TextLabel_19.TextSize = 14.000
-TextLabel_19.TextWrapped = true
-
-UITextSizeConstraint_23.Parent = TextLabel_19
-UITextSizeConstraint_23.MaxTextSize = 40
-UITextSizeConstraint_23.MinTextSize = 8
-
-TextButton_14.Parent = Frame_10
-TextButton_14.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_14.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_14.BackgroundTransparency = 1.000
-TextButton_14.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_14.BorderSizePixel = 0
-TextButton_14.Position = UDim2.new(0, 478, 0, 27)
-TextButton_14.Size = UDim2.new(0.340791732, 0, 0.879792571, 0)
-TextButton_14.Font = Enum.Font.Gotham
-TextButton_14.Text = "Do it"
-TextButton_14.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_14.TextScaled = true
-TextButton_14.TextSize = 14.000
-TextButton_14.TextWrapped = true
-
-UITextSizeConstraint_24.Parent = TextButton_14
-UITextSizeConstraint_24.MaxTextSize = 40
-UITextSizeConstraint_24.MinTextSize = 8
-
-TextLabel_20.Parent = Frame
-TextLabel_20.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_20.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextLabel_20.BackgroundTransparency = 1.000
-TextLabel_20.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_20.BorderSizePixel = 0
-TextLabel_20.Position = UDim2.new(0.575385153, 0, 0.158818066, 0)
-TextLabel_20.Size = UDim2.new(0.739576995, 0, 0.0904893577, 0)
-TextLabel_20.Font = Enum.Font.Gotham
-TextLabel_20.Text = "Start by clicking any of the buttons on the side!"
-TextLabel_20.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_20.TextScaled = true
-TextLabel_20.TextSize = 14.000
-TextLabel_20.TextWrapped = true
-
-TextLabel_21.Parent = Frame
-TextLabel_21.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_21.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextLabel_21.BackgroundTransparency = 1.000
-TextLabel_21.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_21.BorderSizePixel = 0
-TextLabel_21.Position = UDim2.new(0.552541077, 0, 0.966758668, 0)
-TextLabel_21.Size = UDim2.new(0.693888843, 0, 0.0627885386, 0)
-TextLabel_21.Font = Enum.Font.Gotham
-TextLabel_21.Text = "discord: f4t4l1ty_err404\\n"
-TextLabel_21.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_21.TextScaled = true
-TextLabel_21.TextSize = 14.000
-TextLabel_21.TextWrapped = true
-
-TextLabel_22.Parent = Frame
-TextLabel_22.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_22.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextLabel_22.BackgroundTransparency = 1.000
-TextLabel_22.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_22.BorderSizePixel = 0
-TextLabel_22.Position = UDim2.new(0.552541077, 0, 0.916897178, 0)
-TextLabel_22.Size = UDim2.new(0.693888843, 0, 0.0369344316, 0)
-TextLabel_22.Font = Enum.Font.Gotham
-TextLabel_22.Text = "youtube: @fatality404err0r"
-TextLabel_22.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_22.TextScaled = true
-TextLabel_22.TextSize = 14.000
-TextLabel_22.TextWrapped = true
-
-TextLabel_23.Parent = Frame
-TextLabel_23.AnchorPoint = Vector2.new(0.5, 0.5)
-TextLabel_23.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextLabel_23.BackgroundTransparency = 1.000
-TextLabel_23.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel_23.BorderSizePixel = 0
-TextLabel_23.Position = UDim2.new(0.575385094, 0, 0.278393298, 0)
-TextLabel_23.Size = UDim2.new(0.739577055, 0, 0.148661092, 0)
-TextLabel_23.Font = Enum.Font.Gotham
-TextLabel_23.Text = "Warning! You are playing in a very beta version. Things have a high chance of not working or breaking. If there are bugs report them to me. There is also not a lot yet."
-TextLabel_23.TextColor3 = Color3.fromRGB(255, 255, 0)
-TextLabel_23.TextScaled = true
-TextLabel_23.TextSize = 14.000
-TextLabel_23.TextWrapped = true
-
-TextButton_15.Parent = ScreenGui
-TextButton_15.AnchorPoint = Vector2.new(0.5, 0.5)
-TextButton_15.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-TextButton_15.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextButton_15.BorderSizePixel = 0
-TextButton_15.Position = UDim2.new(0.492519438, 30, 0.0378310233, 29)
-TextButton_15.Size = UDim2.new(0.0425230339, 0, 0.0756620392, 0)
-TextButton_15.Font = Enum.Font.Gotham
-TextButton_15.Text = "p"
-TextButton_15.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextButton_15.TextScaled = true
-TextButton_15.TextSize = 50.000
-TextButton_15.TextWrapped = true
-
-UICorner_2.Parent = TextButton_15
-
-UITextSizeConstraint_25.Parent = TextButton_15
-UITextSizeConstraint_25.MaxTextSize = 40
-UITextSizeConstraint_25.MinTextSize = 8
-
--- Scripts:
-
-local function JVGIR_fake_script() -- TextButton.LocalScript 
-	local script = Instance.new('LocalScript', TextButton)
-
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
+]=]
+
+-- Instances: 108 | Scripts: 13 | Modules: 0 | Tags: 0
+local G2L = {};
+
+-- StarterGui.ScreenGui
+G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
+G2L["1"]["IgnoreGuiInset"] = true;
+G2L["1"]["ScreenInsets"] = Enum.ScreenInsets.DeviceSafeInsets;
+G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+
+
+-- StarterGui.ScreenGui.Frame
+G2L["2"] = Instance.new("Frame", G2L["1"]);
+G2L["2"]["Visible"] = false;
+G2L["2"]["BorderSizePixel"] = 0;
+G2L["2"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["2"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["2"]["Size"] = UDim2.new(0.41915, 0, 0.68285, 0);
+G2L["2"]["Position"] = UDim2.new(0.29054, 350, 0.15889, 270);
+G2L["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+-- Attributes
+G2L["2"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.UICorner
+G2L["3"] = Instance.new("UICorner", G2L["2"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.UIStroke
+G2L["4"] = Instance.new("UIStroke", G2L["2"]);
+G2L["4"]["Thickness"] = 1.5;
+G2L["4"]["Color"] = Color3.fromRGB(141, 81, 255);
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel
+G2L["5"] = Instance.new("TextLabel", G2L["2"]);
+G2L["5"]["TextWrapped"] = true;
+G2L["5"]["BorderSizePixel"] = 0;
+G2L["5"]["TextSize"] = 14;
+G2L["5"]["TextScaled"] = true;
+G2L["5"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["5"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["5"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["5"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["5"]["Size"] = UDim2.new(0.99943, 0, 0.05355, 0);
+G2L["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["5"]["Text"] = [[Bstlar's Gui]];
+G2L["5"]["Position"] = UDim2.new(0.49971, 0, 0.02585, 0);
+-- Attributes
+G2L["5"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel.UIStroke
+G2L["6"] = Instance.new("UIStroke", G2L["5"]);
+G2L["6"]["Color"] = Color3.fromRGB(171, 86, 255);
+G2L["6"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+
+
+-- StarterGui.ScreenGui.Frame.Frame
+G2L["7"] = Instance.new("Frame", G2L["2"]);
+G2L["7"]["BorderSizePixel"] = 0;
+G2L["7"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["7"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["7"]["ClipsDescendants"] = true;
+G2L["7"]["Size"] = UDim2.new(0.14278, 0, 0.93444, 0);
+G2L["7"]["Position"] = UDim2.new(0.07139, 0, 0.53186, 0);
+G2L["7"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+-- Attributes
+G2L["7"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Frame.TextButton
+G2L["8"] = Instance.new("TextButton", G2L["7"]);
+G2L["8"]["TextWrapped"] = true;
+G2L["8"]["BorderSizePixel"] = 0;
+G2L["8"]["TextSize"] = 14;
+G2L["8"]["TextScaled"] = true;
+G2L["8"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["8"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["8"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["8"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["8"]["BackgroundTransparency"] = 1;
+G2L["8"]["Size"] = UDim2.new(1, 0, 0.10277, 0);
+G2L["8"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["8"]["Text"] = [[Main]];
+G2L["8"]["Position"] = UDim2.new(0, 50, 0, 26);
+-- Attributes
+G2L["8"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Frame.TextButton.LocalScript
+G2L["9"] = Instance.new("LocalScript", G2L["8"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Frame.TextButton
+G2L["a"] = Instance.new("TextButton", G2L["7"]);
+G2L["a"]["TextWrapped"] = true;
+G2L["a"]["BorderSizePixel"] = 0;
+G2L["a"]["TextSize"] = 14;
+G2L["a"]["TextScaled"] = true;
+G2L["a"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["a"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["a"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["a"]["Size"] = UDim2.new(0, 100, 0, 52);
+G2L["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["a"]["Text"] = [[Teleportation]];
+G2L["a"]["Position"] = UDim2.new(0, 0, 0.10156, 0);
+
+
+-- StarterGui.ScreenGui.Frame.Frame.TextButton
+G2L["b"] = Instance.new("TextButton", G2L["7"]);
+G2L["b"]["TextWrapped"] = true;
+G2L["b"]["BorderSizePixel"] = 0;
+G2L["b"]["TextSize"] = 14;
+G2L["b"]["TextScaled"] = true;
+G2L["b"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["b"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["b"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["b"]["Size"] = UDim2.new(0, 100, 0, 52);
+G2L["b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["b"]["Text"] = [[Local Player]];
+G2L["b"]["Position"] = UDim2.new(0, 0, 0.20313, 0);
+
+
+-- StarterGui.ScreenGui.Frame.Frame.TextButton
+G2L["c"] = Instance.new("TextButton", G2L["7"]);
+G2L["c"]["TextWrapped"] = true;
+G2L["c"]["BorderSizePixel"] = 0;
+G2L["c"]["TextSize"] = 14;
+G2L["c"]["TextScaled"] = true;
+G2L["c"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["c"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["c"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["c"]["Size"] = UDim2.new(0, 100, 0, 52);
+G2L["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["c"]["Text"] = [[Autofarm]];
+G2L["c"]["Position"] = UDim2.new(0, 0, 0.30469, 0);
+
+
+-- StarterGui.ScreenGui.Frame.Frame.TextButton
+G2L["d"] = Instance.new("TextButton", G2L["7"]);
+G2L["d"]["TextWrapped"] = true;
+G2L["d"]["BorderSizePixel"] = 0;
+G2L["d"]["TextSize"] = 14;
+G2L["d"]["TextScaled"] = true;
+G2L["d"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["d"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["d"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["d"]["Size"] = UDim2.new(0, 100, 0, 52);
+G2L["d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["d"]["Text"] = [[Fun]];
+G2L["d"]["Position"] = UDim2.new(0, 0, 0.40625, 0);
+
+
+-- StarterGui.ScreenGui.Frame.Frame.UIListLayout
+G2L["e"] = Instance.new("UIListLayout", G2L["7"]);
+G2L["e"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- StarterGui.ScreenGui.Frame.Frame.TextButton
+G2L["f"] = Instance.new("TextButton", G2L["7"]);
+G2L["f"]["TextWrapped"] = true;
+G2L["f"]["BorderSizePixel"] = 0;
+G2L["f"]["TextSize"] = 14;
+G2L["f"]["TextScaled"] = true;
+G2L["f"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["f"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["f"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["f"]["Size"] = UDim2.new(0, 100, 0, 52);
+G2L["f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["f"]["Text"] = [[Donate]];
+G2L["f"]["Position"] = UDim2.new(0, 0, 0.40625, 0);
+
+
+-- StarterGui.ScreenGui.Frame.Frame.UIStroke
+G2L["10"] = Instance.new("UIStroke", G2L["7"]);
+G2L["10"]["Thickness"] = 1.5;
+G2L["10"]["Color"] = Color3.fromRGB(141, 81, 255);
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel
+G2L["11"] = Instance.new("TextLabel", G2L["2"]);
+G2L["11"]["TextWrapped"] = true;
+G2L["11"]["BorderSizePixel"] = 0;
+G2L["11"]["TextSize"] = 14;
+G2L["11"]["TextScaled"] = true;
+G2L["11"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["11"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["11"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["11"]["BackgroundTransparency"] = 1;
+G2L["11"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["11"]["Size"] = UDim2.new(0.98372, 0, 0.02585, 0);
+G2L["11"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["11"]["Text"] = [[no key system needed]];
+G2L["11"]["Position"] = UDim2.new(0.49829, 0, 1.012, 0);
+-- Attributes
+G2L["11"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel
+G2L["12"] = Instance.new("TextLabel", G2L["2"]);
+G2L["12"]["TextWrapped"] = true;
+G2L["12"]["BorderSizePixel"] = 0;
+G2L["12"]["TextSize"] = 14;
+G2L["12"]["TextScaled"] = true;
+G2L["12"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["12"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["12"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["12"]["BackgroundTransparency"] = 1;
+G2L["12"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["12"]["Size"] = UDim2.new(0.73958, 0, 0.04986, 0);
+G2L["12"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["12"]["Text"] = [[Welcome, [username]];
+G2L["12"]["Position"] = UDim2.new(0.57539, 0, 0.08864, 0);
+-- Attributes
+G2L["12"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel.LocalScript
+G2L["13"] = Instance.new("LocalScript", G2L["12"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main
+G2L["14"] = Instance.new("Frame", G2L["2"]);
+G2L["14"]["Visible"] = false;
+G2L["14"]["ZIndex"] = 2;
+G2L["14"]["BorderSizePixel"] = 0;
+G2L["14"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["14"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["14"]["Size"] = UDim2.new(0.84482, 0, 0.93675, 0);
+G2L["14"]["Position"] = UDim2.new(0.71627, 0, 0.53001, 0);
+G2L["14"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["14"]["Name"] = [[Main]];
+-- Attributes
+G2L["14"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.UIStroke
+G2L["15"] = Instance.new("UIStroke", G2L["14"]);
+G2L["15"]["Thickness"] = 1.5;
+G2L["15"]["Color"] = Color3.fromRGB(171, 86, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame
+G2L["16"] = Instance.new("ScrollingFrame", G2L["14"]);
+G2L["16"]["Active"] = true;
+G2L["16"]["BorderSizePixel"] = 0;
+G2L["16"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["16"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["16"]["Size"] = UDim2.new(1.00362, 0, 0.99975, 0);
+G2L["16"]["Position"] = UDim2.new(0.50024, 0, 0.49877, 0);
+G2L["16"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+-- Attributes
+G2L["16"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.UIStroke
+G2L["17"] = Instance.new("UIStroke", G2L["16"]);
+G2L["17"]["Thickness"] = 1.5;
+G2L["17"]["Color"] = Color3.fromRGB(171, 86, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.UIListLayout
+G2L["18"] = Instance.new("UIListLayout", G2L["16"]);
+G2L["18"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame
+G2L["19"] = Instance.new("Frame", G2L["16"]);
+G2L["19"]["BorderSizePixel"] = 0;
+G2L["19"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["19"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["19"]["Size"] = UDim2.new(0.97835, 0, 0.05657, 0);
+G2L["19"]["Position"] = UDim2.new(0, 290, 0, 14);
+G2L["19"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["19"]["BackgroundTransparency"] = 1;
+-- Attributes
+G2L["19"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["1a"] = Instance.new("TextLabel", G2L["19"]);
+G2L["1a"]["TextWrapped"] = true;
+G2L["1a"]["BorderSizePixel"] = 0;
+G2L["1a"]["TextSize"] = 14;
+G2L["1a"]["TextScaled"] = true;
+G2L["1a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["1a"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["1a"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["1a"]["BackgroundTransparency"] = 1;
+G2L["1a"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["1a"]["Size"] = UDim2.new(0.31153, 0, 0.51024, 0);
+G2L["1a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["1a"]["Text"] = [[Join the discord]];
+G2L["1a"]["Position"] = UDim2.new(0, 90, 0, 18);
+-- Attributes
+G2L["1a"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["1b"] = Instance.new("UITextSizeConstraint", G2L["1a"]);
+G2L["1b"]["MaxTextSize"] = 40;
+G2L["1b"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["1c"] = Instance.new("TextLabel", G2L["19"]);
+G2L["1c"]["TextWrapped"] = true;
+G2L["1c"]["BorderSizePixel"] = 0;
+G2L["1c"]["TextSize"] = 14;
+G2L["1c"]["TextScaled"] = true;
+G2L["1c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["1c"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["1c"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["1c"]["BackgroundTransparency"] = 1;
+G2L["1c"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["1c"]["Size"] = UDim2.new(0.31153, 0, -0.25778, 0);
+G2L["1c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["1c"]["Text"] = [[Automatically copies the discord link]];
+G2L["1c"]["Position"] = UDim2.new(0, 90, 0, 45);
+-- Attributes
+G2L["1c"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["1d"] = Instance.new("UITextSizeConstraint", G2L["1c"]);
+G2L["1d"]["MaxTextSize"] = 40;
+G2L["1d"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton
+G2L["1e"] = Instance.new("TextButton", G2L["19"]);
+G2L["1e"]["TextWrapped"] = true;
+G2L["1e"]["BorderSizePixel"] = 0;
+G2L["1e"]["TextSize"] = 14;
+G2L["1e"]["TextScaled"] = true;
+G2L["1e"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["1e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["1e"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["1e"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["1e"]["BackgroundTransparency"] = 1;
+G2L["1e"]["Size"] = UDim2.new(0.34079, 0, 0.87979, 0);
+G2L["1e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["1e"]["Text"] = [[Do it]];
+G2L["1e"]["Position"] = UDim2.new(0, 478, 0, 27);
+-- Attributes
+G2L["1e"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+G2L["1f"] = Instance.new("LocalScript", G2L["1e"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.UITextSizeConstraint
+G2L["20"] = Instance.new("UITextSizeConstraint", G2L["1e"]);
+G2L["20"]["MaxTextSize"] = 40;
+G2L["20"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.UIStroke
+G2L["21"] = Instance.new("UIStroke", G2L["19"]);
+G2L["21"]["Thickness"] = 1.5;
+G2L["21"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame
+G2L["22"] = Instance.new("Frame", G2L["16"]);
+G2L["22"]["BorderSizePixel"] = 0;
+G2L["22"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["22"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["22"]["Size"] = UDim2.new(0.97835, 0, 0.05657, 0);
+G2L["22"]["Position"] = UDim2.new(0, 290, 0, 14);
+G2L["22"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["22"]["BackgroundTransparency"] = 1;
+-- Attributes
+G2L["22"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["23"] = Instance.new("TextLabel", G2L["22"]);
+G2L["23"]["TextWrapped"] = true;
+G2L["23"]["BorderSizePixel"] = 0;
+G2L["23"]["TextSize"] = 14;
+G2L["23"]["TextScaled"] = true;
+G2L["23"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["23"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["23"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["23"]["BackgroundTransparency"] = 1;
+G2L["23"]["RichText"] = true;
+G2L["23"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["23"]["Size"] = UDim2.new(0.31153, 0, 0.51024, 0);
+G2L["23"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["23"]["Text"] = [[Get game information]];
+G2L["23"]["Position"] = UDim2.new(0, 90, 0, 18);
+-- Attributes
+G2L["23"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["24"] = Instance.new("UITextSizeConstraint", G2L["23"]);
+G2L["24"]["MaxTextSize"] = 40;
+G2L["24"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["25"] = Instance.new("TextLabel", G2L["22"]);
+G2L["25"]["TextWrapped"] = true;
+G2L["25"]["BorderSizePixel"] = 0;
+G2L["25"]["TextSize"] = 14;
+G2L["25"]["TextScaled"] = true;
+G2L["25"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["25"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["25"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["25"]["BackgroundTransparency"] = 1;
+G2L["25"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["25"]["Size"] = UDim2.new(0.31153, 0, -0.32748, 0);
+G2L["25"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["25"]["Text"] = [[Gets the informaton from the current roblox game. [FPS, ping, player count, etc]];
+G2L["25"]["Position"] = UDim2.new(0, 90, 0, 47);
+-- Attributes
+G2L["25"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["26"] = Instance.new("UITextSizeConstraint", G2L["25"]);
+G2L["26"]["MaxTextSize"] = 40;
+G2L["26"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton
+G2L["27"] = Instance.new("TextButton", G2L["22"]);
+G2L["27"]["TextWrapped"] = true;
+G2L["27"]["BorderSizePixel"] = 0;
+G2L["27"]["TextSize"] = 14;
+G2L["27"]["TextScaled"] = true;
+G2L["27"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["27"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["27"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["27"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["27"]["BackgroundTransparency"] = 1;
+G2L["27"]["Size"] = UDim2.new(0.34079, 0, 0.87979, 0);
+G2L["27"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["27"]["Text"] = [[Do it]];
+G2L["27"]["Position"] = UDim2.new(0, 478, 0, 27);
+-- Attributes
+G2L["27"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+G2L["28"] = Instance.new("LocalScript", G2L["27"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.UITextSizeConstraint
+G2L["29"] = Instance.new("UITextSizeConstraint", G2L["27"]);
+G2L["29"]["MaxTextSize"] = 40;
+G2L["29"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.UIStroke
+G2L["2a"] = Instance.new("UIStroke", G2L["22"]);
+G2L["2a"]["Thickness"] = 1.5;
+G2L["2a"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame
+G2L["2b"] = Instance.new("Frame", G2L["16"]);
+G2L["2b"]["BorderSizePixel"] = 0;
+G2L["2b"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["2b"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["2b"]["Size"] = UDim2.new(0.97835, 0, 0.05657, 0);
+G2L["2b"]["Position"] = UDim2.new(0, 290, 0, 14);
+G2L["2b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["2b"]["BackgroundTransparency"] = 1;
+-- Attributes
+G2L["2b"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["2c"] = Instance.new("TextLabel", G2L["2b"]);
+G2L["2c"]["TextWrapped"] = true;
+G2L["2c"]["BorderSizePixel"] = 0;
+G2L["2c"]["TextSize"] = 14;
+G2L["2c"]["TextScaled"] = true;
+G2L["2c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["2c"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["2c"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["2c"]["BackgroundTransparency"] = 1;
+G2L["2c"]["RichText"] = true;
+G2L["2c"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["2c"]["Size"] = UDim2.new(0.31153, 0, 0.51024, 0);
+G2L["2c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["2c"]["Text"] = [[Serverhop]];
+G2L["2c"]["Position"] = UDim2.new(0, 90, 0, 18);
+-- Attributes
+G2L["2c"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["2d"] = Instance.new("UITextSizeConstraint", G2L["2c"]);
+G2L["2d"]["MaxTextSize"] = 40;
+G2L["2d"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["2e"] = Instance.new("TextLabel", G2L["2b"]);
+G2L["2e"]["TextWrapped"] = true;
+G2L["2e"]["BorderSizePixel"] = 0;
+G2L["2e"]["TextSize"] = 14;
+G2L["2e"]["TextScaled"] = true;
+G2L["2e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["2e"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["2e"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["2e"]["BackgroundTransparency"] = 1;
+G2L["2e"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["2e"]["Size"] = UDim2.new(0.31153, 0, -0.32748, 0);
+G2L["2e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["2e"]["Text"] = [[Automatically serverhops for you]];
+G2L["2e"]["Position"] = UDim2.new(0, 90, 0, 47);
+-- Attributes
+G2L["2e"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["2f"] = Instance.new("UITextSizeConstraint", G2L["2e"]);
+G2L["2f"]["MaxTextSize"] = 40;
+G2L["2f"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton
+G2L["30"] = Instance.new("TextButton", G2L["2b"]);
+G2L["30"]["TextWrapped"] = true;
+G2L["30"]["BorderSizePixel"] = 0;
+G2L["30"]["TextSize"] = 14;
+G2L["30"]["TextScaled"] = true;
+G2L["30"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["30"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["30"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["30"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["30"]["BackgroundTransparency"] = 1;
+G2L["30"]["Size"] = UDim2.new(0.34079, 0, 0.87979, 0);
+G2L["30"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["30"]["Text"] = [[Do it]];
+G2L["30"]["Position"] = UDim2.new(0, 478, 0, 27);
+-- Attributes
+G2L["30"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+G2L["31"] = Instance.new("LocalScript", G2L["30"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.UITextSizeConstraint
+G2L["32"] = Instance.new("UITextSizeConstraint", G2L["30"]);
+G2L["32"]["MaxTextSize"] = 40;
+G2L["32"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.UIStroke
+G2L["33"] = Instance.new("UIStroke", G2L["2b"]);
+G2L["33"]["Thickness"] = 1.5;
+G2L["33"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame
+G2L["34"] = Instance.new("Frame", G2L["16"]);
+G2L["34"]["BorderSizePixel"] = 0;
+G2L["34"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["34"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["34"]["Size"] = UDim2.new(0.97835, 0, 0.05657, 0);
+G2L["34"]["Position"] = UDim2.new(0, 290, 0, 14);
+G2L["34"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["34"]["BackgroundTransparency"] = 1;
+-- Attributes
+G2L["34"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["35"] = Instance.new("TextLabel", G2L["34"]);
+G2L["35"]["TextWrapped"] = true;
+G2L["35"]["BorderSizePixel"] = 0;
+G2L["35"]["TextSize"] = 14;
+G2L["35"]["TextScaled"] = true;
+G2L["35"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["35"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["35"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["35"]["BackgroundTransparency"] = 1;
+G2L["35"]["RichText"] = true;
+G2L["35"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["35"]["Size"] = UDim2.new(0.31153, 0, 0.51024, 0);
+G2L["35"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["35"]["Text"] = [[Anti Lag]];
+G2L["35"]["Position"] = UDim2.new(0, 90, 0, 18);
+-- Attributes
+G2L["35"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["36"] = Instance.new("UITextSizeConstraint", G2L["35"]);
+G2L["36"]["MaxTextSize"] = 40;
+G2L["36"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["37"] = Instance.new("TextLabel", G2L["34"]);
+G2L["37"]["TextWrapped"] = true;
+G2L["37"]["BorderSizePixel"] = 0;
+G2L["37"]["TextSize"] = 14;
+G2L["37"]["TextScaled"] = true;
+G2L["37"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["37"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["37"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["37"]["BackgroundTransparency"] = 1;
+G2L["37"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["37"]["Size"] = UDim2.new(0.31153, 0, -0.32748, 0);
+G2L["37"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["37"]["Text"] = [[Disables all textures, attempting to fix lag.]];
+G2L["37"]["Position"] = UDim2.new(0, 90, 0, 47);
+-- Attributes
+G2L["37"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["38"] = Instance.new("UITextSizeConstraint", G2L["37"]);
+G2L["38"]["MaxTextSize"] = 40;
+G2L["38"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton
+G2L["39"] = Instance.new("TextButton", G2L["34"]);
+G2L["39"]["TextWrapped"] = true;
+G2L["39"]["BorderSizePixel"] = 0;
+G2L["39"]["TextSize"] = 14;
+G2L["39"]["TextScaled"] = true;
+G2L["39"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["39"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["39"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["39"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["39"]["BackgroundTransparency"] = 1;
+G2L["39"]["Size"] = UDim2.new(0.34079, 0, 0.87979, 0);
+G2L["39"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["39"]["Text"] = [[Anti Lag: Off]];
+G2L["39"]["Position"] = UDim2.new(0, 478, 0, 27);
+-- Attributes
+G2L["39"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+G2L["3a"] = Instance.new("LocalScript", G2L["39"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.UITextSizeConstraint
+G2L["3b"] = Instance.new("UITextSizeConstraint", G2L["39"]);
+G2L["3b"]["MaxTextSize"] = 40;
+G2L["3b"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.UIStroke
+G2L["3c"] = Instance.new("UIStroke", G2L["34"]);
+G2L["3c"]["Thickness"] = 1.5;
+G2L["3c"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame
+G2L["3d"] = Instance.new("Frame", G2L["16"]);
+G2L["3d"]["BorderSizePixel"] = 0;
+G2L["3d"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["3d"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["3d"]["Size"] = UDim2.new(0.97835, 0, 0.05657, 0);
+G2L["3d"]["Position"] = UDim2.new(0, 290, 0, 14);
+G2L["3d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["3d"]["BackgroundTransparency"] = 1;
+-- Attributes
+G2L["3d"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["3e"] = Instance.new("TextLabel", G2L["3d"]);
+G2L["3e"]["TextWrapped"] = true;
+G2L["3e"]["BorderSizePixel"] = 0;
+G2L["3e"]["TextSize"] = 14;
+G2L["3e"]["TextScaled"] = true;
+G2L["3e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["3e"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["3e"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["3e"]["BackgroundTransparency"] = 1;
+G2L["3e"]["RichText"] = true;
+G2L["3e"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["3e"]["Size"] = UDim2.new(0.31153, 0, 0.51024, 0);
+G2L["3e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["3e"]["Text"] = [[Anti Kick]];
+G2L["3e"]["Position"] = UDim2.new(0, 90, 0, 18);
+-- Attributes
+G2L["3e"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["3f"] = Instance.new("UITextSizeConstraint", G2L["3e"]);
+G2L["3f"]["MaxTextSize"] = 40;
+G2L["3f"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["40"] = Instance.new("TextLabel", G2L["3d"]);
+G2L["40"]["TextWrapped"] = true;
+G2L["40"]["BorderSizePixel"] = 0;
+G2L["40"]["TextSize"] = 14;
+G2L["40"]["TextScaled"] = true;
+G2L["40"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["40"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["40"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["40"]["BackgroundTransparency"] = 1;
+G2L["40"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["40"]["Size"] = UDim2.new(0.31153, 0, -0.32748, 0);
+G2L["40"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["40"]["Text"] = [[Attempts to prevent you from being kicked for standing still for too long.]];
+G2L["40"]["Position"] = UDim2.new(0, 90, 0, 47);
+-- Attributes
+G2L["40"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["41"] = Instance.new("UITextSizeConstraint", G2L["40"]);
+G2L["41"]["MaxTextSize"] = 40;
+G2L["41"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton
+G2L["42"] = Instance.new("TextButton", G2L["3d"]);
+G2L["42"]["TextWrapped"] = true;
+G2L["42"]["BorderSizePixel"] = 0;
+G2L["42"]["TextSize"] = 14;
+G2L["42"]["TextScaled"] = true;
+G2L["42"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["42"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["42"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["42"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["42"]["BackgroundTransparency"] = 1;
+G2L["42"]["Size"] = UDim2.new(0.34079, 0, 0.87979, 0);
+G2L["42"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["42"]["Text"] = [[Anti Kick: Off]];
+G2L["42"]["Position"] = UDim2.new(0, 478, 0, 27);
+-- Attributes
+G2L["42"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+G2L["43"] = Instance.new("LocalScript", G2L["42"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.UITextSizeConstraint
+G2L["44"] = Instance.new("UITextSizeConstraint", G2L["42"]);
+G2L["44"]["MaxTextSize"] = 40;
+G2L["44"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.UIStroke
+G2L["45"] = Instance.new("UIStroke", G2L["3d"]);
+G2L["45"]["Thickness"] = 1.5;
+G2L["45"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame
+G2L["46"] = Instance.new("Frame", G2L["16"]);
+G2L["46"]["BorderSizePixel"] = 0;
+G2L["46"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["46"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["46"]["Size"] = UDim2.new(0.97835, 0, 0.05657, 0);
+G2L["46"]["Position"] = UDim2.new(0, 290, 0, 14);
+G2L["46"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["46"]["BackgroundTransparency"] = 1;
+-- Attributes
+G2L["46"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["47"] = Instance.new("TextLabel", G2L["46"]);
+G2L["47"]["TextWrapped"] = true;
+G2L["47"]["BorderSizePixel"] = 0;
+G2L["47"]["TextSize"] = 14;
+G2L["47"]["TextScaled"] = true;
+G2L["47"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["47"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["47"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["47"]["BackgroundTransparency"] = 1;
+G2L["47"]["RichText"] = true;
+G2L["47"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["47"]["Size"] = UDim2.new(0.31153, 0, 0.51024, 0);
+G2L["47"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["47"]["Text"] = [[Drag Interface]];
+G2L["47"]["Position"] = UDim2.new(0, 90, 0, 18);
+-- Attributes
+G2L["47"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["48"] = Instance.new("UITextSizeConstraint", G2L["47"]);
+G2L["48"]["MaxTextSize"] = 40;
+G2L["48"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["49"] = Instance.new("TextLabel", G2L["46"]);
+G2L["49"]["TextWrapped"] = true;
+G2L["49"]["BorderSizePixel"] = 0;
+G2L["49"]["TextSize"] = 14;
+G2L["49"]["TextScaled"] = true;
+G2L["49"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["49"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["49"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["49"]["BackgroundTransparency"] = 1;
+G2L["49"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["49"]["Size"] = UDim2.new(0.31153, 0, -0.32748, 0);
+G2L["49"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["49"]["Text"] = [[Toggle for dragging the interface]];
+G2L["49"]["Position"] = UDim2.new(0, 90, 0, 47);
+-- Attributes
+G2L["49"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["4a"] = Instance.new("UITextSizeConstraint", G2L["49"]);
+G2L["4a"]["MaxTextSize"] = 40;
+G2L["4a"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton
+G2L["4b"] = Instance.new("TextButton", G2L["46"]);
+G2L["4b"]["TextWrapped"] = true;
+G2L["4b"]["BorderSizePixel"] = 0;
+G2L["4b"]["TextSize"] = 14;
+G2L["4b"]["TextScaled"] = true;
+G2L["4b"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["4b"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["4b"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["4b"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["4b"]["BackgroundTransparency"] = 1;
+G2L["4b"]["Size"] = UDim2.new(0.34079, 0, 0.87979, 0);
+G2L["4b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["4b"]["Text"] = [[On]];
+G2L["4b"]["Position"] = UDim2.new(0, 478, 0, 27);
+-- Attributes
+G2L["4b"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+G2L["4c"] = Instance.new("LocalScript", G2L["4b"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.UITextSizeConstraint
+G2L["4d"] = Instance.new("UITextSizeConstraint", G2L["4b"]);
+G2L["4d"]["MaxTextSize"] = 40;
+G2L["4d"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.UIStroke
+G2L["4e"] = Instance.new("UIStroke", G2L["46"]);
+G2L["4e"]["Thickness"] = 1.5;
+G2L["4e"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame
+G2L["4f"] = Instance.new("Frame", G2L["16"]);
+G2L["4f"]["BorderSizePixel"] = 0;
+G2L["4f"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["4f"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["4f"]["Size"] = UDim2.new(0.97835, 0, 0.05657, 0);
+G2L["4f"]["Position"] = UDim2.new(0, 290, 0, 14);
+G2L["4f"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["4f"]["BackgroundTransparency"] = 1;
+-- Attributes
+G2L["4f"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["50"] = Instance.new("TextLabel", G2L["4f"]);
+G2L["50"]["TextWrapped"] = true;
+G2L["50"]["BorderSizePixel"] = 0;
+G2L["50"]["TextSize"] = 14;
+G2L["50"]["TextScaled"] = true;
+G2L["50"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["50"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["50"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["50"]["BackgroundTransparency"] = 1;
+G2L["50"]["RichText"] = true;
+G2L["50"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["50"]["Size"] = UDim2.new(0.31153, 0, 0.51024, 0);
+G2L["50"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["50"]["Text"] = [[Drag Button]];
+G2L["50"]["Position"] = UDim2.new(0, 90, 0, 18);
+-- Attributes
+G2L["50"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["51"] = Instance.new("UITextSizeConstraint", G2L["50"]);
+G2L["51"]["MaxTextSize"] = 40;
+G2L["51"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["52"] = Instance.new("TextLabel", G2L["4f"]);
+G2L["52"]["TextWrapped"] = true;
+G2L["52"]["BorderSizePixel"] = 0;
+G2L["52"]["TextSize"] = 14;
+G2L["52"]["TextScaled"] = true;
+G2L["52"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["52"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["52"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["52"]["BackgroundTransparency"] = 1;
+G2L["52"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["52"]["Size"] = UDim2.new(0.31153, 0, -0.32748, 0);
+G2L["52"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["52"]["Text"] = [[Toggle for dragging the interface]];
+G2L["52"]["Position"] = UDim2.new(0, 90, 0, 47);
+-- Attributes
+G2L["52"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["53"] = Instance.new("UITextSizeConstraint", G2L["52"]);
+G2L["53"]["MaxTextSize"] = 40;
+G2L["53"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton
+G2L["54"] = Instance.new("TextButton", G2L["4f"]);
+G2L["54"]["TextWrapped"] = true;
+G2L["54"]["BorderSizePixel"] = 0;
+G2L["54"]["TextSize"] = 14;
+G2L["54"]["TextScaled"] = true;
+G2L["54"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["54"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["54"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["54"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["54"]["BackgroundTransparency"] = 1;
+G2L["54"]["Size"] = UDim2.new(0.34079, 0, 0.87979, 0);
+G2L["54"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["54"]["Text"] = [[On]];
+G2L["54"]["Position"] = UDim2.new(0, 478, 0, 27);
+-- Attributes
+G2L["54"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+G2L["55"] = Instance.new("LocalScript", G2L["54"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.UITextSizeConstraint
+G2L["56"] = Instance.new("UITextSizeConstraint", G2L["54"]);
+G2L["56"]["MaxTextSize"] = 40;
+G2L["56"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.UIStroke
+G2L["57"] = Instance.new("UIStroke", G2L["4f"]);
+G2L["57"]["Thickness"] = 1.5;
+G2L["57"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame
+G2L["58"] = Instance.new("Frame", G2L["16"]);
+G2L["58"]["BorderSizePixel"] = 0;
+G2L["58"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["58"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["58"]["Size"] = UDim2.new(0.97835, 0, 0.05657, 0);
+G2L["58"]["Position"] = UDim2.new(0, 290, 0, 14);
+G2L["58"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["58"]["BackgroundTransparency"] = 1;
+-- Attributes
+G2L["58"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["59"] = Instance.new("TextLabel", G2L["58"]);
+G2L["59"]["TextWrapped"] = true;
+G2L["59"]["BorderSizePixel"] = 0;
+G2L["59"]["TextSize"] = 14;
+G2L["59"]["TextScaled"] = true;
+G2L["59"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["59"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["59"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["59"]["BackgroundTransparency"] = 1;
+G2L["59"]["RichText"] = true;
+G2L["59"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["59"]["Size"] = UDim2.new(0.48291, 0, 0.51024, 0);
+G2L["59"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["59"]["Text"] = [[Replace Button and Interface]];
+G2L["59"]["Position"] = UDim2.new(0, 140, 0, 18);
+-- Attributes
+G2L["59"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["5a"] = Instance.new("UITextSizeConstraint", G2L["59"]);
+G2L["5a"]["MaxTextSize"] = 40;
+G2L["5a"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel
+G2L["5b"] = Instance.new("TextLabel", G2L["58"]);
+G2L["5b"]["TextWrapped"] = true;
+G2L["5b"]["BorderSizePixel"] = 0;
+G2L["5b"]["TextSize"] = 14;
+G2L["5b"]["TextScaled"] = true;
+G2L["5b"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["5b"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["5b"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["5b"]["BackgroundTransparency"] = 1;
+G2L["5b"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["5b"]["Size"] = UDim2.new(0.47243, 0, -0.32748, 0);
+G2L["5b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["5b"]["Text"] = [[Puts both elements into their original spots.]];
+G2L["5b"]["Position"] = UDim2.new(0, 137, 0, 47);
+-- Attributes
+G2L["5b"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextLabel.UITextSizeConstraint
+G2L["5c"] = Instance.new("UITextSizeConstraint", G2L["5b"]);
+G2L["5c"]["MaxTextSize"] = 40;
+G2L["5c"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton
+G2L["5d"] = Instance.new("TextButton", G2L["58"]);
+G2L["5d"]["TextWrapped"] = true;
+G2L["5d"]["BorderSizePixel"] = 0;
+G2L["5d"]["TextSize"] = 14;
+G2L["5d"]["TextScaled"] = true;
+G2L["5d"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["5d"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["5d"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["5d"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["5d"]["BackgroundTransparency"] = 1;
+G2L["5d"]["Size"] = UDim2.new(0.34079, 0, 0.87979, 0);
+G2L["5d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["5d"]["Text"] = [[Do it]];
+G2L["5d"]["Position"] = UDim2.new(0, 478, 0, 27);
+-- Attributes
+G2L["5d"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+G2L["5e"] = Instance.new("LocalScript", G2L["5d"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.UITextSizeConstraint
+G2L["5f"] = Instance.new("UITextSizeConstraint", G2L["5d"]);
+G2L["5f"]["MaxTextSize"] = 40;
+G2L["5f"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.UIStroke
+G2L["60"] = Instance.new("UIStroke", G2L["58"]);
+G2L["60"]["Thickness"] = 1.5;
+G2L["60"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.ScreenGui.Frame.Main.LocalScript
+G2L["61"] = Instance.new("LocalScript", G2L["14"]);
+
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel
+G2L["62"] = Instance.new("TextLabel", G2L["2"]);
+G2L["62"]["TextWrapped"] = true;
+G2L["62"]["BorderSizePixel"] = 0;
+G2L["62"]["TextSize"] = 14;
+G2L["62"]["TextScaled"] = true;
+G2L["62"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["62"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["62"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["62"]["BackgroundTransparency"] = 1;
+G2L["62"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["62"]["Size"] = UDim2.new(0.73958, 0, 0.09049, 0);
+G2L["62"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["62"]["Text"] = [[Start by clicking any of the buttons on the side!]];
+G2L["62"]["Position"] = UDim2.new(0.57539, 0, 0.15882, 0);
+-- Attributes
+G2L["62"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel
+G2L["63"] = Instance.new("TextLabel", G2L["2"]);
+G2L["63"]["TextWrapped"] = true;
+G2L["63"]["BorderSizePixel"] = 0;
+G2L["63"]["TextSize"] = 14;
+G2L["63"]["TextScaled"] = true;
+G2L["63"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["63"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["63"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["63"]["BackgroundTransparency"] = 1;
+G2L["63"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["63"]["Size"] = UDim2.new(0.69389, 0, 0.06279, 0);
+G2L["63"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["63"]["Text"] = [[discord: f4t4l1ty_err404
+]];
+G2L["63"]["Position"] = UDim2.new(0.55254, 0, 0.96676, 0);
+-- Attributes
+G2L["63"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel
+G2L["64"] = Instance.new("TextLabel", G2L["2"]);
+G2L["64"]["TextWrapped"] = true;
+G2L["64"]["BorderSizePixel"] = 0;
+G2L["64"]["TextSize"] = 14;
+G2L["64"]["TextScaled"] = true;
+G2L["64"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["64"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["64"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["64"]["BackgroundTransparency"] = 1;
+G2L["64"]["RichText"] = true;
+G2L["64"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["64"]["Size"] = UDim2.new(0.69389, 0, 0.03693, 0);
+G2L["64"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["64"]["Text"] = [[youtube: @fatality404err0r]];
+G2L["64"]["Position"] = UDim2.new(0.55254, 0, 0.9169, 0);
+-- Attributes
+G2L["64"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.Frame.TextLabel
+G2L["65"] = Instance.new("TextLabel", G2L["2"]);
+G2L["65"]["TextWrapped"] = true;
+G2L["65"]["BorderSizePixel"] = 0;
+G2L["65"]["TextSize"] = 14;
+G2L["65"]["TextScaled"] = true;
+G2L["65"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["65"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["65"]["TextColor3"] = Color3.fromRGB(255, 255, 0);
+G2L["65"]["BackgroundTransparency"] = 1;
+G2L["65"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["65"]["Size"] = UDim2.new(0.73958, 0, 0.14866, 0);
+G2L["65"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["65"]["Text"] = [[Warning! You are playing in a very beta version. Things have a high chance of not working or breaking. If there are bugs report them to me. There is also not a lot yet.]];
+G2L["65"]["Position"] = UDim2.new(0.57539, 0, 0.27839, 0);
+-- Attributes
+G2L["65"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.TextButton
+G2L["66"] = Instance.new("TextButton", G2L["1"]);
+G2L["66"]["TextWrapped"] = true;
+G2L["66"]["BorderSizePixel"] = 0;
+G2L["66"]["TextSize"] = 50;
+G2L["66"]["TextScaled"] = true;
+G2L["66"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["66"]["BackgroundColor3"] = Color3.fromRGB(31, 31, 31);
+G2L["66"]["FontFace"] = Font.new([[rbxasset://fonts/families/GothamSSm.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["66"]["AnchorPoint"] = Vector2.new(0.5, 0.5);
+G2L["66"]["Size"] = UDim2.new(0.04252, 0, 0.07566, 0);
+G2L["66"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["66"]["Text"] = [[p]];
+G2L["66"]["Position"] = UDim2.new(0.49252, 30, 0.03783, 29);
+-- Attributes
+G2L["66"]:SetAttribute([[AutoScaleDefaultsApplied]], true);
+
+
+-- StarterGui.ScreenGui.TextButton.LocalScript
+G2L["67"] = Instance.new("LocalScript", G2L["66"]);
+
+
+
+-- StarterGui.ScreenGui.TextButton.LocalScript
+G2L["68"] = Instance.new("LocalScript", G2L["66"]);
+
+
+
+-- StarterGui.ScreenGui.TextButton.Sound
+G2L["69"] = Instance.new("Sound", G2L["66"]);
+G2L["69"]["Volume"] = 0.25;
+-- [ERROR] cannot convert AudioContent, please report to "https://github.com/uniquadev/GuiToLuaConverter/issues"
+G2L["69"]["SoundId"] = [[rbxassetid://129584950954499]];
+
+
+-- StarterGui.ScreenGui.TextButton.UICorner
+G2L["6a"] = Instance.new("UICorner", G2L["66"]);
+
+
+
+-- StarterGui.ScreenGui.TextButton.UIStroke
+G2L["6b"] = Instance.new("UIStroke", G2L["66"]);
+G2L["6b"]["Thickness"] = 1.5;
+G2L["6b"]["Color"] = Color3.fromRGB(141, 81, 255);
+G2L["6b"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+
+
+-- StarterGui.ScreenGui.TextButton.UITextSizeConstraint
+G2L["6c"] = Instance.new("UITextSizeConstraint", G2L["66"]);
+G2L["6c"]["MaxTextSize"] = 40;
+G2L["6c"]["MinTextSize"] = 8;
+
+
+-- StarterGui.ScreenGui.Frame.Frame.TextButton.LocalScript
+local function C_9()
+local script = G2L["9"];
 	local button = script.Parent
 	-- This goes up two levels to find the target frame
 	local frame = button.Parent.Parent.Main
@@ -882,11 +1224,11 @@ local function JVGIR_fake_script() -- TextButton.LocalScript
 	end)
 	
 	
-end
-coroutine.wrap(JVGIR_fake_script)()
-local function MKEALQ_fake_script() -- TextLabel_3.LocalScript 
-	local script = Instance.new('LocalScript', TextLabel_3)
-
+end;
+task.spawn(C_9);
+-- StarterGui.ScreenGui.Frame.TextLabel.LocalScript
+local function C_13()
+local script = G2L["13"];
 	local textLabel = script.Parent
 	local Players = game:GetService("Players")
 	
@@ -899,11 +1241,11 @@ local function MKEALQ_fake_script() -- TextLabel_3.LocalScript
 	end
 	
 	
-end
-coroutine.wrap(MKEALQ_fake_script)()
-local function EUGBBT_fake_script() -- TextButton_7.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_7)
-
+end;
+task.spawn(C_13);
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+local function C_1f()
+local script = G2L["1f"];
 	local button = script.Parent
 	
 	-- Your specific Discord invite link
@@ -933,11 +1275,11 @@ local function EUGBBT_fake_script() -- TextButton_7.LocalScript
 	end)
 	
 	
-end
-coroutine.wrap(EUGBBT_fake_script)()
-local function ROKZWIC_fake_script() -- TextButton_8.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_8)
-
+end;
+task.spawn(C_1f);
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+local function C_28()
+local script = G2L["28"];
 	local button = script.Parent
 	local Workspace = game:GetService("Workspace")
 	local Players = game:GetService("Players")
@@ -1008,11 +1350,11 @@ local function ROKZWIC_fake_script() -- TextButton_8.LocalScript
 	end)
 	
 	
-end
-coroutine.wrap(ROKZWIC_fake_script)()
-local function HITEDN_fake_script() -- TextButton_9.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_9)
-
+end;
+task.spawn(C_28);
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+local function C_31()
+local script = G2L["31"];
 	local button = script.Parent
 	local TeleportService = game:GetService("TeleportService")
 	local Players = game:GetService("Players")
@@ -1043,11 +1385,11 @@ local function HITEDN_fake_script() -- TextButton_9.LocalScript
 	
 	
 	
-end
-coroutine.wrap(HITEDN_fake_script)()
-local function QLKIGMY_fake_script() -- TextButton_10.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_10)
-
+end;
+task.spawn(C_31);
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+local function C_3a()
+local script = G2L["3a"];
 	local button = script.Parent
 	local Workspace = game:GetService("Workspace")
 	
@@ -1135,11 +1477,11 @@ local function QLKIGMY_fake_script() -- TextButton_10.LocalScript
 	button.MouseButton1Click:Connect(toggleAntiLag)
 	
 	
-end
-coroutine.wrap(QLKIGMY_fake_script)()
-local function EQNWE_fake_script() -- TextButton_11.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_11)
-
+end;
+task.spawn(C_3a);
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+local function C_43()
+local script = G2L["43"];
 	local button = script.Parent
 	local Players = game:GetService("Players")
 	local VirtualUser = game:GetService("VirtualUser")
@@ -1185,11 +1527,11 @@ local function EQNWE_fake_script() -- TextButton_11.LocalScript
 	button.MouseButton1Click:Connect(toggleAntiAfk)
 	
 	
-end
-coroutine.wrap(EQNWE_fake_script)()
-local function UCYL_fake_script() -- TextButton_12.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_12)
-
+end;
+task.spawn(C_43);
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+local function C_4c()
+local script = G2L["4c"];
 	local UserInputService = game:GetService("UserInputService")
 	local button = script.Parent
 	
@@ -1265,11 +1607,11 @@ local function UCYL_fake_script() -- TextButton_12.LocalScript
 	end
 	
 	
-end
-coroutine.wrap(UCYL_fake_script)()
-local function SIIMUF_fake_script() -- TextButton_13.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_13)
-
+end;
+task.spawn(C_4c);
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+local function C_55()
+local script = G2L["55"];
 	local UserInputService = game:GetService("UserInputService")
 	local button = script.Parent
 	
@@ -1345,11 +1687,11 @@ local function SIIMUF_fake_script() -- TextButton_13.LocalScript
 	end
 	
 	
-end
-coroutine.wrap(SIIMUF_fake_script)()
-local function PIJLZJ_fake_script() -- TextButton_14.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_14)
-
+end;
+task.spawn(C_55);
+-- StarterGui.ScreenGui.Frame.Main.ScrollingFrame.Frame.TextButton.LocalScript
+local function C_5e()
+local script = G2L["5e"];
 	local button = script.Parent
 	
 	-- 1. Paths to your elements (Adjust these to match your exact hierarchy)
@@ -1381,11 +1723,45 @@ local function PIJLZJ_fake_script() -- TextButton_14.LocalScript
 		button.Text = originalText
 	end)
 	
-end
-coroutine.wrap(PIJLZJ_fake_script)()
-local function UNAZRPJ_fake_script() -- TextButton_15.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_15)
-
+end;
+task.spawn(C_5e);
+-- StarterGui.ScreenGui.Frame.Main.LocalScript
+local function C_61()
+local script = G2L["61"];
+	local mainFrame = script.Parent
+	
+	-- 1. Safely locate your scrolling container
+	local scrollingFrame = mainFrame:FindFirstChildOfClass("ScrollingFrame")
+	if not scrollingFrame then
+		for _, child in ipairs(mainFrame:GetDescendants()) do
+			if child:IsA("ScrollingFrame") then
+				scrollingFrame = child
+				break
+			end
+		end
+	end
+	
+	-- 2. Force ONLY the absolute positioning anchors to lock together
+	if scrollingFrame then
+		-- Fixes the scrolling window container so it sticks to the center of Main
+		scrollingFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+		scrollingFrame.Position = UDim2.new(0.5, 0, 0.53, 0) -- Centered vertically right below header
+	
+		-- Fixes every single sub-menu frame/row inside the scroll area
+		for _, row in ipairs(scrollingFrame:GetChildren()) do
+			if row:IsA("Frame") or row:IsA("TextButton") or row:IsA("TextLabel") then
+				-- Pins the top-center of the row to the center axis of the frame
+				row.AnchorPoint = Vector2.new(0.5, 0)
+				row.Position = UDim2.new(0.5, 0, row.Position.Y.Scale, row.Position.Y.Offset)
+			end
+		end
+	end
+	
+end;
+task.spawn(C_61);
+-- StarterGui.ScreenGui.TextButton.LocalScript
+local function C_67()
+local script = G2L["67"];
 	local button = script.Parent
 	
 	-- Save your default color and your custom hover color
@@ -1403,13 +1779,13 @@ local function UNAZRPJ_fake_script() -- TextButton_15.LocalScript
 	end)
 	
 	
-end
-coroutine.wrap(UNAZRPJ_fake_script)()
-local function YABEW_fake_script() -- TextButton_15.LocalScript 
-	local script = Instance.new('LocalScript', TextButton_15)
-
+end;
+task.spawn(C_67);
+-- StarterGui.ScreenGui.TextButton.LocalScript
+local function C_68()
+local script = G2L["68"];
 	local button = script.Parent
-	-- local sound = button:WaitForChild("Sound") avoids the infinite yield.
+	local sound = button:WaitForChild("Sound")
 	
 	-- Find your main hidden window frame
 	local screenGui = button.Parent
@@ -1419,13 +1795,14 @@ local function YABEW_fake_script() -- TextButton_15.LocalScript
 	button.MouseButton1Click:Connect(function()
 		-- Only play the sound if the frame is currently invisible (closed)
 		if not mainFrame.Visible then
-			-- sound:Play() this causes problems
+			sound:Play()
 		end
 	
 		-- Toggle the visibility of the frame
 		mainFrame.Visible = not mainFrame.Visible
 	end)
 	
-end
-coroutine.wrap(YABEW_fake_script)()
--- New rewrite
+end;
+task.spawn(C_68);
+
+return G2L["1"], require;
