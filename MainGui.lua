@@ -984,6 +984,11 @@ do local s = Pages["Main"]
     local ESP_COLOR_PLAYER  = Color3.fromRGB(0, 130, 255)
     local ESP_COLOR_MONSTER = Color3.fromRGB(255, 50, 50)
 
+    -- Forward declarations for optimized Extra ESP Info tracking
+    local extraESPOn = false
+    local activeESPInfos = {}
+    local createESPInfo, removeESPInfo, updateESPInfo
+
     local function createESP(model, color)
         -- Remove any stale/broken highlight first
         local existing = model:FindFirstChild("BstlarESP")
@@ -1002,77 +1007,195 @@ do local s = Pages["Main"]
         h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
         h.Enabled   = true
         h.Parent    = model
+
+        if extraESPOn and createESPInfo then
+            createESPInfo(model)
+        end
     end
 
     local function removeESP(model)
         local h = model:FindFirstChild("BstlarESP")
         if h then h:Destroy() end
+        if removeESPInfo then removeESPInfo(model) end
+    end
+
+    -- ── ESP INFO BILLBOARDS ────────────────────────────────────────────
+    -- BillboardGui parented to HumanoidRootPart, always-on-top, infinite
+    -- distance. A single 0.1 s Heartbeat loop refreshes all active labels.
+    local espInfoConn = nil
+
+    createESPInfo = function(model)
+        local hrp = model:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        if hrp:FindFirstChild("BstlarESPInfo") then return end
+
+        local bb = Instance.new("BillboardGui")
+        bb.Name        = "BstlarESPInfo"
+        bb.AlwaysOnTop = true
+        bb.Size        = UDim2.new(0, 200, 0, 60)
+        bb.StudsOffset = Vector3.new(0, 3.2, 0)
+        bb.MaxDistance = 0   -- 0 = always visible, regardless of distance
+        bb.Parent      = hrp
+
+        local bg = Instance.new("Frame", bb)
+        bg.Name                   = "Bg"
+        bg.Size                   = UDim2.new(1, 0, 1, 0)
+        bg.BackgroundColor3       = Color3.fromRGB(10, 8, 18)
+        bg.BackgroundTransparency = 0.25
+        bg.BorderSizePixel        = 0
+        local bgC = Instance.new("UICorner", bg)
+        bgC.CornerRadius = UDim.new(0, 6)
+
+        -- Purple accent strip on the left edge
+        local strip = Instance.new("Frame", bg)
+        strip.Size             = UDim2.new(0, 3, 0.65, 0)
+        strip.Position         = UDim2.new(0, 0, 0.175, 0)
+        strip.BackgroundColor3 = C.AccentBrt
+        strip.BorderSizePixel  = 0
+        local sC = Instance.new("UICorner", strip)
+        sC.CornerRadius = UDim.new(0, 2)
+
+        local function mkIL(name, yOff, fs, col, bold)
+            local l = Instance.new("TextLabel", bg)
+            l.Name                   = name
+            l.Size                   = UDim2.new(1, -14, 0, fs + 3)
+            l.Position               = UDim2.new(0, 10, 0, yOff)
+            l.BackgroundTransparency = 1
+            l.Text                   = ""
+            l.TextColor3             = col
+            l.TextSize               = fs
+            l.Font                   = bold and Enum.Font.GothamBold or Enum.Font.Gotham
+            l.TextXAlignment         = Enum.TextXAlignment.Left
+            l.TextTruncate           = Enum.TextTruncate.AtEnd
+            return l
+        end
+        mkIL("NameLbl", 4,  13, C.Text,    true)
+        mkIL("PosLbl",  22, 11, C.TextSub, false)
+        mkIL("SpdLbl",  38, 11, C.TextSub, false)
+
+        activeESPInfos[model] = true
+    end
+
+    removeESPInfo = function(model)
+        local hrp = model:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local info = hrp:FindFirstChild("BstlarESPInfo")
+            if info then info:Destroy() end
+        end
+        activeESPInfos[model] = nil
+    end
+
+    updateESPInfo = function(model)
+        if not model.Parent then
+            activeESPInfos[model] = nil
+            return
+        end
+        local hrp = model:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        local bb = hrp:FindFirstChild("BstlarESPInfo")
+        if not bb then return end
+        local bg = bb:FindFirstChild("Bg")
+        if not bg then return end
+
+        local nl = bg:FindFirstChild("NameLbl")
+        local pl = bg:FindFirstChild("PosLbl")
+        local sl = bg:FindFirstChild("SpdLbl")
+
+        if nl then nl.Text = model.Name end
+        if pl then
+            local p = hrp.Position
+            pl.Text = string.format("Pos  %.0f, %.0f, %.0f", p.X, p.Y, p.Z)
+        end
+        if sl then
+            local spd = 0
+            pcall(function() spd = hrp.AssemblyLinearVelocity.Magnitude end)
+            if spd == 0 then pcall(function() spd = hrp.Velocity.Magnitude end) end
+            sl.Text = string.format("Speed  %.1f st/s", spd)
+        end
     end
 
     -- ── PLAYER ESP ─────────────────────────────────────────────────
-    -- Fully event-driven: no polling loop, so it works at any distance
-    -- and survives respawns and late-joins.
-    local playerESPOn   = false
-    local pespConns     = {}   -- [player] = {charConn, ...}
-    local Players       = game:GetService("Players")
+    -- Three-layer system so ESP survives resets, late-joins AND streaming:
+    --  1. CharacterAdded   → explicit respawn (waits for HRP to fully load)
+    --  2. DescendantAdded  → character streaming back into range
+    --  3. Heartbeat sweep  → safety net every 2 s for anything missed
+    local playerESPOn     = false
+    local pespConns       = {}   -- [player] = charConn
+    local Players         = game:GetService("Players")
+    local pespAddedConn   = nil
+    local pespRemovedConn = nil
+    local pespStreamConn  = nil  -- workspace.DescendantAdded
+    local pespSweepConn   = nil  -- Heartbeat sweep
 
-    local function pespAddChar(char)
+    local function pespApply(char)
         if not playerESPOn then return end
-        createESP(char, ESP_COLOR_PLAYER)
+        -- Wait until the HumanoidRootPart actually exists before stamping
+        if not char:FindFirstChild("HumanoidRootPart") then
+            char:WaitForChild("HumanoidRootPart", 10)
+        end
+        if playerESPOn then
+            createESP(char, ESP_COLOR_PLAYER)
+        end
     end
 
     local function pespTrackPlayer(p)
         if p == Players.LocalPlayer then return end
         if pespConns[p] then return end  -- already tracked
-        local t = {}
-        -- Apply to any existing character immediately
+        -- Apply to existing character right now
         if p.Character then
-            task.defer(function()
-                if playerESPOn and p.Character then
-                    createESP(p.Character, ESP_COLOR_PLAYER)
-                end
-            end)
+            task.spawn(pespApply, p.Character)
         end
-        -- Re-apply on every respawn
-        t.charConn = p.CharacterAdded:Connect(function(char)
-            task.wait()  -- let char load 1 frame so HRP exists
-            pespAddChar(char)
+        -- Re-apply on every respawn (CharacterAdded fires on reset)
+        pespConns[p] = p.CharacterAdded:Connect(function(char)
+            task.spawn(pespApply, char)
         end)
-        pespConns[p] = t
     end
 
     local function pespUntrackPlayer(p)
-        local t = pespConns[p]
-        if t then
-            if t.charConn then t.charConn:Disconnect() end
-            pespConns[p] = nil
-        end
-        -- Remove highlight from their character if it exists
+        local conn = pespConns[p]
+        if conn then conn:Disconnect(); pespConns[p] = nil end
         if p.Character then removeESP(p.Character) end
     end
-
-    local pespAddedConn   = nil
-    local pespRemovedConn = nil
 
     mkToggle(s, "Player ESP", "Highlights other players in Blue through walls.", function(on)
         playerESPOn = on
         if on then
-            -- Track all current players
-            for _, p in ipairs(Players:GetPlayers()) do
-                pespTrackPlayer(p)
-            end
-            -- Track future players
-            pespAddedConn = Players.PlayerAdded:Connect(pespTrackPlayer)
-            -- Clean up when a player leaves
+            -- 1. Track all current + future players (respawn handling)
+            for _, p in ipairs(Players:GetPlayers()) do pespTrackPlayer(p) end
+            pespAddedConn   = Players.PlayerAdded:Connect(pespTrackPlayer)
             pespRemovedConn = Players.PlayerRemoving:Connect(pespUntrackPlayer)
+
+            -- 2. Streaming: catch character models appearing in workspace
+            --    (DescendantAdded fires when a streamed-out char comes back)
+            pespStreamConn = workspace.DescendantAdded:Connect(function(desc)
+                if not playerESPOn then return end
+                if desc:IsA("Model") then
+                    local p = Players:GetPlayerFromCharacter(desc)
+                    if p and p ~= Players.LocalPlayer then
+                        task.spawn(pespApply, desc)
+                    end
+                end
+            end)
+
+            -- 3. Heartbeat sweep every 2 s — re-stamps any char that lost its highlight
+            local pespNextSweep = tick() + 2
+            pespSweepConn = RUN.Heartbeat:Connect(function()
+                if tick() < pespNextSweep then return end
+                pespNextSweep = tick() + 2
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p ~= Players.LocalPlayer and p.Character then
+                        if not p.Character:FindFirstChild("BstlarESP") then
+                            createESP(p.Character, ESP_COLOR_PLAYER)
+                        end
+                    end
+                end
+            end)
         else
-            -- Disconnect global watchers
             if pespAddedConn   then pespAddedConn:Disconnect();   pespAddedConn   = nil end
             if pespRemovedConn then pespRemovedConn:Disconnect(); pespRemovedConn = nil end
-            -- Untrack & remove highlights from everyone
-            for p, _ in pairs(pespConns) do
-                pespUntrackPlayer(p)
-            end
+            if pespStreamConn  then pespStreamConn:Disconnect();  pespStreamConn  = nil end
+            if pespSweepConn   then pespSweepConn:Disconnect();   pespSweepConn   = nil end
+            for p, _ in pairs(pespConns) do pespUntrackPlayer(p) end
             pespConns = {}
         end
     end)
@@ -1124,13 +1247,11 @@ do local s = Pages["Main"]
             end)
             -- Periodic sweep: re-apply to any that lost their highlight
             -- (e.g. model was cloned by the game), and remove from dead ones
+            local mespNextSweep = tick() + 3
             mespSweepConn = RUN.Heartbeat:Connect(function()
                 -- throttle: run sweep every ~3 seconds using a counter
-                -- we store tick on the connection table itself
-                if not mespSweepConn then return end
-                if not mespSweepConn._next then mespSweepConn._next = tick() + 3 end
-                if tick() < mespSweepConn._next then return end
-                mespSweepConn._next = tick() + 3
+                if tick() < mespNextSweep then return end
+                mespNextSweep = tick() + 3
                 for _, v in ipairs(workspace:GetDescendants()) do
                     if v:IsA("Model") and not Players:GetPlayerFromCharacter(v) then
                         local hum = v:FindFirstChildOfClass("Humanoid")
@@ -1154,6 +1275,45 @@ do local s = Pages["Main"]
                 if v:IsA("Model") and not Players:GetPlayerFromCharacter(v) then
                     removeESP(v)
                 end
+            end
+        end
+    end)
+
+    -- ── EXTRA ESP INFO ─────────────────────────────────────────────────
+    mkToggle(s, "Extra ESP Info", "Shows name, pos, speed. (Disclaimer: May cause lag)", function(on)
+        extraESPOn = on
+        if on then
+            -- Stamp on all currently ESP'd models immediately
+            for _, p in ipairs(Players:GetPlayers()) do
+                if p ~= Players.LocalPlayer and p.Character then
+                    if p.Character:FindFirstChild("BstlarESP") then
+                        createESPInfo(p.Character)
+                    end
+                end
+            end
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v:IsA("Model") and not Players:GetPlayerFromCharacter(v) then
+                    if v:FindFirstChild("BstlarESP") then createESPInfo(v) end
+                end
+            end
+            -- Refresh loop: just iterate over our optimized cache table
+            local espInfoNext = tick()
+            espInfoConn = RUN.Heartbeat:Connect(function()
+                if tick() - espInfoNext < 0.1 then return end
+                espInfoNext = tick()
+                for model in pairs(activeESPInfos) do
+                    updateESPInfo(model)
+                end
+            end)
+        else
+            if espInfoConn then espInfoConn:Disconnect(); espInfoConn = nil end
+            -- Strip all info GUIs from players
+            for _, p in ipairs(Players:GetPlayers()) do
+                if p.Character then removeESPInfo(p.Character) end
+            end
+            -- Strip all info GUIs from workspace models
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v:IsA("Model") then removeESPInfo(v) end
             end
         end
     end)
@@ -1235,6 +1395,15 @@ do local s = Pages["Main"]
             end)
         else
             if noclipConn then noclipConn:Disconnect(); noclipConn = nil end
+            if plr.Character then
+                for _, v in ipairs(plr.Character:GetDescendants()) do
+                    if v:IsA("BasePart") then
+                        if v.Name == "HumanoidRootPart" or v.Name == "Torso" or v.Name == "UpperTorso" or v.Name == "LowerTorso" or v.Name == "Head" then
+                            v.CanCollide = true
+                        end
+                    end
+                end
+            end
         end
     end)
 
@@ -1252,15 +1421,30 @@ do local s = Pages["Main"]
     end, function(selectedName)
         task.spawn(function()
             local target = Players:FindFirstChild(selectedName)
-            if not (target and target.Character) then return end
+            if not target then return end
+
+            -- If the character isn't loaded yet (streaming), wait briefly
+            if not target.Character then
+                local t = tick()
+                repeat task.wait(0.1) until target.Character or tick()-t > 5
+            end
+            if not target.Character then return end
 
             local tChar = target.Character
-            -- Wait up to 5s for the target's HumanoidRootPart to be ready
             local tHRP = tChar:FindFirstChild("HumanoidRootPart")
             if not tHRP then
                 tHRP = tChar:WaitForChild("HumanoidRootPart", 5)
             end
             if not tHRP then return end
+
+            -- Snapshot destination before we request streaming
+            local dest = tHRP.CFrame * CFrame.new(0, 0, 3)
+
+            -- Force the server to stream the target area to our client
+            -- (no-ops gracefully if streaming isn't enabled in this game)
+            pcall(function()
+                Players.LocalPlayer:RequestStreamAroundAsync(dest.Position, 5)
+            end)
 
             local lp    = Players.LocalPlayer
             local lChar = lp.Character
@@ -1268,24 +1452,13 @@ do local s = Pages["Main"]
             local lHRP  = lChar:FindFirstChild("HumanoidRootPart")
             if not lHRP then return end
 
-            -- Destination: 3 studs behind target
-            local dest = tHRP.CFrame * CFrame.new(0, 0, 3)
-
-            -- Try PivotTo first (works across any distance in executors)
-            local ok = pcall(function()
-                lChar:PivotTo(dest)
-            end)
+            -- Try PivotTo first (best cross-distance method)
+            local ok = pcall(function() lChar:PivotTo(dest) end)
             if not ok then
-                -- Fallback: SetPrimaryPartCFrame
-                ok = pcall(function()
-                    lChar:SetPrimaryPartCFrame(dest)
-                end)
+                ok = pcall(function() lChar:SetPrimaryPartCFrame(dest) end)
             end
             if not ok then
-                -- Last resort: direct HRP CFrame assignment
-                pcall(function()
-                    lHRP.CFrame = dest
-                end)
+                pcall(function() lHRP.CFrame = dest end)
             end
         end)
     end)
