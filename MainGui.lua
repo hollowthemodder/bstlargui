@@ -334,7 +334,7 @@ mkL(TBar, "@bstlarscript",
 local Bdg = mkF(TBar, UDim2.new(0,96,0,24), UDim2.new(0,218,0.5,-12), C.AccentMid, "Badge", 13)
 rnd(Bdg, 12)
 strk(Bdg, C.AccentBrt, 1)
-mkL(Bdg, "v0.1 release",
+mkL(Bdg, "v0.1.1 bugfix",
     UDim2.new(1,0,1,0), UDim2.new(0,0,0,0),
     C.White, 11, FK.Black, "BdgTxt", Enum.TextXAlignment.Center, 14)
 
@@ -981,17 +981,27 @@ do local s = Pages["Main"]
     -- ── ESP section ───────────────────────────────────────────────
     mkSection(s, "ESP")
 
+    local ESP_COLOR_PLAYER  = Color3.fromRGB(0, 130, 255)
+    local ESP_COLOR_MONSTER = Color3.fromRGB(255, 50, 50)
+
     local function createESP(model, color)
-        if not model:FindFirstChild("BstlarESP") then
-            local h = Instance.new("Highlight")
-            h.Name = "BstlarESP"
-            h.FillColor = color
-            h.OutlineColor = color
-            h.FillTransparency = 0.5
-            h.OutlineTransparency = 0
-            h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-            h.Parent = model
+        -- Remove any stale/broken highlight first
+        local existing = model:FindFirstChild("BstlarESP")
+        if existing then
+            -- If already correct color, keep it; otherwise recreate
+            if existing.FillColor == color then return end
+            existing:Destroy()
         end
+        local h = Instance.new("Highlight")
+        h.Name            = "BstlarESP"
+        h.FillColor       = color
+        h.OutlineColor    = color
+        h.FillTransparency    = 0.5
+        h.OutlineTransparency = 0
+        -- AlwaysOnTop so distance never hides it
+        h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        h.Enabled   = true
+        h.Parent    = model
     end
 
     local function removeESP(model)
@@ -999,50 +1009,149 @@ do local s = Pages["Main"]
         if h then h:Destroy() end
     end
 
-    local playerESPOn = false
+    -- ── PLAYER ESP ─────────────────────────────────────────────────
+    -- Fully event-driven: no polling loop, so it works at any distance
+    -- and survives respawns and late-joins.
+    local playerESPOn   = false
+    local pespConns     = {}   -- [player] = {charConn, ...}
+    local Players       = game:GetService("Players")
+
+    local function pespAddChar(char)
+        if not playerESPOn then return end
+        createESP(char, ESP_COLOR_PLAYER)
+    end
+
+    local function pespTrackPlayer(p)
+        if p == Players.LocalPlayer then return end
+        if pespConns[p] then return end  -- already tracked
+        local t = {}
+        -- Apply to any existing character immediately
+        if p.Character then
+            task.defer(function()
+                if playerESPOn and p.Character then
+                    createESP(p.Character, ESP_COLOR_PLAYER)
+                end
+            end)
+        end
+        -- Re-apply on every respawn
+        t.charConn = p.CharacterAdded:Connect(function(char)
+            task.wait()  -- let char load 1 frame so HRP exists
+            pespAddChar(char)
+        end)
+        pespConns[p] = t
+    end
+
+    local function pespUntrackPlayer(p)
+        local t = pespConns[p]
+        if t then
+            if t.charConn then t.charConn:Disconnect() end
+            pespConns[p] = nil
+        end
+        -- Remove highlight from their character if it exists
+        if p.Character then removeESP(p.Character) end
+    end
+
+    local pespAddedConn   = nil
+    local pespRemovedConn = nil
+
     mkToggle(s, "Player ESP", "Highlights other players in Blue through walls.", function(on)
         playerESPOn = on
         if on then
-            task.spawn(function()
-                while playerESPOn do
-                    for _, p in ipairs(game:GetService("Players"):GetPlayers()) do
-                        if p ~= game:GetService("Players").LocalPlayer and p.Character then
-                            createESP(p.Character, Color3.fromRGB(0, 130, 255))
-                        end
-                    end
-                    task.wait(0.5)
-                end
-            end)
-        else
-            for _, p in ipairs(game:GetService("Players"):GetPlayers()) do
-                if p.Character then removeESP(p.Character) end
+            -- Track all current players
+            for _, p in ipairs(Players:GetPlayers()) do
+                pespTrackPlayer(p)
             end
+            -- Track future players
+            pespAddedConn = Players.PlayerAdded:Connect(pespTrackPlayer)
+            -- Clean up when a player leaves
+            pespRemovedConn = Players.PlayerRemoving:Connect(pespUntrackPlayer)
+        else
+            -- Disconnect global watchers
+            if pespAddedConn   then pespAddedConn:Disconnect();   pespAddedConn   = nil end
+            if pespRemovedConn then pespRemovedConn:Disconnect(); pespRemovedConn = nil end
+            -- Untrack & remove highlights from everyone
+            for p, _ in pairs(pespConns) do
+                pespUntrackPlayer(p)
+            end
+            pespConns = {}
         end
     end)
 
-    local monsterESPOn = false
+    -- ── MONSTER ESP ────────────────────────────────────────────────
+    -- Uses DescendantAdded to catch new/respawned monsters instantly,
+    -- plus a periodic sweep to clean dead ones.
+    local monsterESPOn      = false
+    local mespDescConn      = nil
+    local mespSweepConn     = nil
+
+    local function isMonster(v)
+        if not v:IsA("Model") then return false end
+        local hum = v:FindFirstChildOfClass("Humanoid")
+        if not hum then return false end
+        if hum.Health <= 0 then return false end
+        if Players:GetPlayerFromCharacter(v) then return false end
+        return true
+    end
+
+    local function mespApply(v)
+        if not monsterESPOn then return end
+        if isMonster(v) then
+            createESP(v, ESP_COLOR_MONSTER)
+        end
+    end
+
     mkToggle(s, "Monster ESP", "Highlights non-player Humanoids (monsters) in Red.", function(on)
         monsterESPOn = on
         if on then
-            task.spawn(function()
-                while monsterESPOn do
-                    for _, v in ipairs(game:GetService("Workspace"):GetDescendants()) do
-                        if v:IsA("Model") then
-                            local hum = v:FindFirstChildOfClass("Humanoid")
-                            if hum and hum.Health > 0 and not game:GetService("Players"):GetPlayerFromCharacter(v) then
-                                -- Target active/moving humanoids
-                                if hum.WalkSpeed > 0 then
-                                    createESP(v, Color3.fromRGB(255, 50, 50))
-                                end
+            -- Apply to all existing monsters right now
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if isMonster(v) then
+                    createESP(v, ESP_COLOR_MONSTER)
+                end
+            end
+            -- Watch for newly added descendants (spawns / respawns)
+            mespDescConn = workspace.DescendantAdded:Connect(function(desc)
+                -- When a Humanoid is added, check its parent Model
+                if desc:IsA("Humanoid") then
+                    local model = desc.Parent
+                    if model and isMonster(model) then
+                        task.wait()  -- 1 frame for health/state to settle
+                        if monsterESPOn and isMonster(model) then
+                            createESP(model, ESP_COLOR_MONSTER)
+                        end
+                    end
+                end
+            end)
+            -- Periodic sweep: re-apply to any that lost their highlight
+            -- (e.g. model was cloned by the game), and remove from dead ones
+            mespSweepConn = RUN.Heartbeat:Connect(function()
+                -- throttle: run sweep every ~3 seconds using a counter
+                -- we store tick on the connection table itself
+                if not mespSweepConn then return end
+                if not mespSweepConn._next then mespSweepConn._next = tick() + 3 end
+                if tick() < mespSweepConn._next then return end
+                mespSweepConn._next = tick() + 3
+                for _, v in ipairs(workspace:GetDescendants()) do
+                    if v:IsA("Model") and not Players:GetPlayerFromCharacter(v) then
+                        local hum = v:FindFirstChildOfClass("Humanoid")
+                        if hum then
+                            if hum.Health > 0 then
+                                -- alive monster - ensure ESP exists
+                                createESP(v, ESP_COLOR_MONSTER)
+                            else
+                                -- dead - remove ESP
+                                removeESP(v)
                             end
                         end
                     end
-                    task.wait(1.5)
                 end
             end)
         else
-            for _, v in ipairs(game:GetService("Workspace"):GetDescendants()) do
-                if v:IsA("Model") and not game:GetService("Players"):GetPlayerFromCharacter(v) then
+            if mespDescConn  then mespDescConn:Disconnect();  mespDescConn  = nil end
+            if mespSweepConn then mespSweepConn:Disconnect(); mespSweepConn = nil end
+            -- Remove all monster highlights
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v:IsA("Model") and not Players:GetPlayerFromCharacter(v) then
                     removeESP(v)
                 end
             end
@@ -1134,21 +1243,51 @@ do local s = Pages["Main"]
     
     mkDropdown(s, "Teleport to Player", "Click to select a player to teleport to.", function()
         local list = {}
-        for _, p in ipairs(game:GetService("Players"):GetPlayers()) do
-            if p ~= game:GetService("Players").LocalPlayer then
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= Players.LocalPlayer then
                 table.insert(list, p.Name)
             end
         end
         return list
     end, function(selectedName)
-        local target = game:GetService("Players"):FindFirstChild(selectedName)
-        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-            local lp = game:GetService("Players").LocalPlayer
-            if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
-                -- Teleport slightly behind them
-                lp.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
+        task.spawn(function()
+            local target = Players:FindFirstChild(selectedName)
+            if not (target and target.Character) then return end
+
+            local tChar = target.Character
+            -- Wait up to 5s for the target's HumanoidRootPart to be ready
+            local tHRP = tChar:FindFirstChild("HumanoidRootPart")
+            if not tHRP then
+                tHRP = tChar:WaitForChild("HumanoidRootPart", 5)
             end
-        end
+            if not tHRP then return end
+
+            local lp    = Players.LocalPlayer
+            local lChar = lp.Character
+            if not lChar then return end
+            local lHRP  = lChar:FindFirstChild("HumanoidRootPart")
+            if not lHRP then return end
+
+            -- Destination: 3 studs behind target
+            local dest = tHRP.CFrame * CFrame.new(0, 0, 3)
+
+            -- Try PivotTo first (works across any distance in executors)
+            local ok = pcall(function()
+                lChar:PivotTo(dest)
+            end)
+            if not ok then
+                -- Fallback: SetPrimaryPartCFrame
+                ok = pcall(function()
+                    lChar:SetPrimaryPartCFrame(dest)
+                end)
+            end
+            if not ok then
+                -- Last resort: direct HRP CFrame assignment
+                pcall(function()
+                    lHRP.CFrame = dest
+                end)
+            end
+        end)
     end)
 end
 
@@ -1405,14 +1544,16 @@ local stripCorner = Instance.new("UICorner", warnStrip)
 stripCorner.CornerRadius = UDim.new(0, 2)
 
 local warnLbl = Instance.new("TextLabel")
-warnLbl.Size = UDim2.new(1, -20, 1, 0)
+warnLbl.Size = UDim2.new(1, -26, 1, 0)
 warnLbl.Position = UDim2.new(0, 16, 0, 0)
 warnLbl.BackgroundTransparency = 1
-warnLbl.Text = "⚠️ Warning: Do not reload the script if you have toggles on to prevent things from breaking."
+warnLbl.Text = "[!] Warning: Do not reload the script if you have toggles on to prevent things from breaking."
 warnLbl.TextColor3 = C.Text
 warnLbl.TextSize = 11
 warnLbl.Font = FK.Bold
 warnLbl.TextXAlignment = Enum.TextXAlignment.Left
+warnLbl.TextYAlignment = Enum.TextYAlignment.Center
+warnLbl.TextTruncate = Enum.TextTruncate.AtEnd
 warnLbl.Parent = warnFrame
 
 task.delay(10, function()
@@ -1424,4 +1565,4 @@ task.delay(10, function()
 end)
 
 return BstlarGui
--- revamp :) no problem
+
