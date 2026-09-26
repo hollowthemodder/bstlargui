@@ -883,6 +883,7 @@ actMain()
 do local s = Pages["Main"]
     -- ── Loop Speed state ──────────────────────────────────────────
     local loopSpeedConn = nil
+    local fixSpeedConn  = nil
     local loopSpeed     = 50
 
     local function getHum()
@@ -897,6 +898,7 @@ do local s = Pages["Main"]
     -- Toggle: starts/stops the Heartbeat loop
     mkToggle(s, "Loop Speed", "Bypasses server WalkSpeed resets by re-applying every frame.", function(on)
         if on then
+            if fixSpeedConn then fixSpeedConn:Disconnect(); fixSpeedConn = nil end
             loopSpeedConn = RUN.Heartbeat:Connect(function()
                 local hum = getHum()
                 if hum then hum.WalkSpeed = loopSpeed end
@@ -932,6 +934,17 @@ do local s = Pages["Main"]
         pcall(function()
             local hum = getHum()
             if hum then hum.WalkSpeed = 16 end
+        end)
+    end)
+
+    -- Button: overriding loop for reloads
+    mkButton(s, "Fix Reloaded Speed", "Fixes stuck speed from a reloaded script by forcing it to 16.", "Fix", function()
+        if fixSpeedConn then fixSpeedConn:Disconnect() end
+        fixSpeedConn = RUN.Heartbeat:Connect(function()
+            task.defer(function()
+                local hum = getHum()
+                if hum then hum.WalkSpeed = 16 end
+            end)
         end)
     end)
 
