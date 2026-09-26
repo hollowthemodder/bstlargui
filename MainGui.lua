@@ -21,6 +21,17 @@ if not GParent then
 end
 
 -- Destroy any existing instance so re-running doesn't conflict
+local unloadCallbacks = {}
+if getgenv then
+    if getgenv().BstlarUnload then pcall(getgenv().BstlarUnload) end
+    getgenv().BstlarUnload = function()
+        for _, fn in ipairs(unloadCallbacks) do pcall(fn) end
+        pcall(function()
+            local existing = GParent:FindFirstChild("BstlarGui")
+            if existing then existing:Destroy() end
+        end)
+    end
+end
 pcall(function()
     local existing = GParent:FindFirstChild("BstlarGui")
     if existing then existing:Destroy() end
@@ -334,7 +345,7 @@ mkL(TBar, "@bstlarscript",
 local Bdg = mkF(TBar, UDim2.new(0,96,0,24), UDim2.new(0,218,0.5,-12), C.AccentMid, "Badge", 13)
 rnd(Bdg, 12)
 strk(Bdg, C.AccentBrt, 1)
-mkL(Bdg, "v0.1.1 bugfix",
+mkL(Bdg, "v0.2r",
     UDim2.new(1,0,1,0), UDim2.new(0,0,0,0),
     C.White, 11, FK.Black, "BdgTxt", Enum.TextXAlignment.Center, 14)
 
@@ -508,23 +519,34 @@ local function mkToggle(scroll, title, desc, cb)
     rnd(Knob, 9)
 
     local on = false
+    table.insert(unloadCallbacks, function()
+        if on then
+            on = false
+            if cb then pcall(cb, false) end
+        end
+    end)
     local Hit = mkB(Card,"",UDim2.new(1,0,1,0),nil,C.Black,"Hit",18)
     Hit.BackgroundTransparency = 1
+
     Hit.MouseButton1Click:Connect(function()
         on = not on
         tw(Pill, {BackgroundColor3 = on and C.TogOn or C.TogOff})
         tw(PillStroke, {Color = on and C.AccentBrt or C.Border})
         tw(Knob, {Position = on and UDim2.new(1,-21,0.5,-9) or UDim2.new(0,3,0.5,-9)})
         tw(LStrip,{BackgroundColor3 = on and C.AccentMid or C.AccentDim})
-        if cb then cb(on) end
+        if cb then pcall(cb, on) end
     end)
     Hit.MouseEnter:Connect(function() tw(Card,{BackgroundColor3=C.CardHov}) end)
     Hit.MouseLeave:Connect(function() tw(Card,{BackgroundColor3=C.Card}) end)
+    
     return Card
 end
 
 -- ── Slider ─────────────────────────────
-local function mkSlider(scroll, title, desc, mn, mx, def, cb)
+local function mkSlider(scroll, title, desc, mn, mx, def, arg1, arg2)
+    local step, cb
+    if type(arg1) == "number" then step = arg1; cb = arg2
+    else step = 1; cb = arg1 end
     mn=mn or 0; mx=mx or 100; def=def or mn
     local h = desc and 78 or 64
     local Card = mkF(scroll, UDim2.new(1,0,0,h), nil, C.Card, "Sld_"..title, 15)
@@ -563,7 +585,10 @@ local function mkSlider(scroll, title, desc, mn, mx, def, cb)
     local sldDrag = false
     local function upd(ax)
         local p = math.clamp((ax-Track.AbsolutePosition.X)/Track.AbsoluteSize.X,0,1)
-        local v = math.floor(mn + p*(mx-mn)+0.5)
+        local rawV = mn + p*(mx-mn)
+        local v = math.floor(rawV / step + 0.5) * step
+        -- Fix floating point display issues
+        v = math.floor(v * 1000 + 0.5) / 1000
         p = (v-mn)/(mx-mn)
         Fill.Size = UDim2.new(p,0,1,0)
         Hnd.Position = UDim2.new(p,-6,0.5,-6)
@@ -885,6 +910,9 @@ do local s = Pages["Main"]
     local loopSpeedConn = nil
     local fixSpeedConn  = nil
     local loopSpeed     = 50
+    table.insert(unloadCallbacks, function()
+        if fixSpeedConn then fixSpeedConn:Disconnect(); fixSpeedConn = nil end
+    end)
 
     local function getHum()
         local plr  = game:GetService("Players").LocalPlayer
@@ -948,6 +976,86 @@ do local s = Pages["Main"]
         end)
     end)
 
+    -- ── Character Size ────────────────────────────────────────────
+    mkSection(s, "Character Size")
+
+    local sizeOn   = false
+    local sizeVal  = 1
+    local sizeConn = nil
+    local r6Cache  = setmetatable({}, {__mode = "k"})
+
+    local function applySize()
+        local hum = getHum()
+        if not hum then return end
+        local char = hum.Parent
+        if not char then return end
+        
+        local targetScale = sizeOn and sizeVal or 1
+        
+        if hum.RigType == Enum.HumanoidRigType.R15 then
+            -- Standard R15 Scaling Values
+            for _, scaleName in ipairs({"BodyDepthScale", "BodyHeightScale", "BodyWidthScale", "HeadScale"}) do
+                local scaleObj = hum:FindFirstChild(scaleName)
+                if scaleObj and scaleObj:IsA("NumberValue") then
+                    scaleObj.Value = targetScale
+                end
+            end
+        else
+            -- Custom R6 Scaling (caching original values to prevent exponential explosion)
+            local cache = r6Cache[char]
+            if not cache then cache = {}; r6Cache[char] = cache end
+            
+            for _, v in ipairs(char:GetDescendants()) do
+                local dat = cache[v]
+                if not dat then
+                    if v:IsA("BasePart") then
+                        dat = { Type = "Part", Size = v.Size }
+                        cache[v] = dat
+                    elseif v:IsA("Motor6D") then
+                        dat = { Type = "Motor6D", C0 = v.C0, C1 = v.C1 }
+                        cache[v] = dat
+                    elseif v:IsA("Attachment") then
+                        dat = { Type = "Attachment", Position = v.Position }
+                        cache[v] = dat
+                    elseif v:IsA("SpecialMesh") or v:IsA("BlockMesh") or v:IsA("CylinderMesh") then
+                        dat = { Type = "Mesh", Scale = v.Scale }
+                        cache[v] = dat
+                    end
+                end
+                
+                if dat then
+                    if dat.Type == "Part" then
+                        v.Size = dat.Size * targetScale
+                    elseif dat.Type == "Motor6D" then
+                        v.C0 = CFrame.new(dat.C0.Position * targetScale) * (dat.C0 - dat.C0.Position)
+                        v.C1 = CFrame.new(dat.C1.Position * targetScale) * (dat.C1 - dat.C1.Position)
+                    elseif dat.Type == "Attachment" then
+                        v.Position = dat.Position * targetScale
+                    elseif dat.Type == "Mesh" then
+                        v.Scale = dat.Scale * targetScale
+                    end
+                end
+            end
+        end
+    end
+
+    mkToggle(s, "Toggle Size", "Force your character's scale. (Works for R15 and R6)", function(on)
+        sizeOn = on
+        if on then
+            if sizeConn then sizeConn:Disconnect() end
+            -- Loop it to prevent anti-cheats from reverting it
+            sizeConn = RUN.Heartbeat:Connect(applySize)
+        else
+            if sizeConn then sizeConn:Disconnect(); sizeConn = nil end
+            applySize() -- Reset back to 1 instantly
+        end
+    end)
+
+    mkSlider(s, "Size Multiplier", "0.5 = Tiny, 1 = Normal, 3 = Giant", 0.5, 3, 1, 0.1, function(v)
+        sizeVal = v
+        if sizeOn then applySize() end
+    end)
+
     -- ── Lighting section ──────────────────────────────────────────
     mkSection(s, "Lighting")
 
@@ -1007,7 +1115,10 @@ do local s = Pages["Main"]
         local existing = model:FindFirstChild("BstlarESP")
         if existing then
             -- If already correct color, keep it; otherwise recreate
-            if existing.FillColor == color then return end
+            if existing.FillColor == color then
+                if extraESPOn and createESPInfo then createESPInfo(model) end
+                return
+            end
             existing:Destroy()
         end
         local h = Instance.new("Highlight")
@@ -1444,19 +1555,17 @@ do local s = Pages["Main"]
             if not target.Character then return end
 
             local tChar = target.Character
-            local tHRP = tChar:FindFirstChild("HumanoidRootPart")
-            if not tHRP then
-                tHRP = tChar:WaitForChild("HumanoidRootPart", 5)
-            end
-            if not tHRP then return end
-
-            -- Snapshot destination before we request streaming
-            local dest = tHRP.CFrame * CFrame.new(0, 0, 3)
+            
+            -- Use GetPivot() to bypass StreamingEnabled limitations! 
+            -- We don't need to wait for their HumanoidRootPart to stream in.
+            local dest = tChar:GetPivot() * CFrame.new(0, 0, 3)
 
             -- Force the server to stream the target area to our client
             -- (no-ops gracefully if streaming isn't enabled in this game)
-            pcall(function()
-                Players.LocalPlayer:RequestStreamAroundAsync(dest.Position, 5)
+            task.spawn(function()
+                pcall(function()
+                    Players.LocalPlayer:RequestStreamAroundAsync(dest.Position, 5)
+                end)
             end)
 
             local lp    = Players.LocalPlayer
@@ -1474,6 +1583,66 @@ do local s = Pages["Main"]
                 pcall(function() lHRP.CFrame = dest end)
             end
         end)
+    end)
+
+    local tpTools = setmetatable({}, {__mode="k"})
+    table.insert(unloadCallbacks, function()
+        for t in pairs(tpTools) do
+            if t and t.Parent then pcall(function() t:Destroy() end) end
+        end
+    end)
+
+    mkButton(s, "Click-Teleport Tool", "Equip and click anywhere to instantly teleport there.", "Give", function()
+        local lp = game:GetService("Players").LocalPlayer
+        if not lp then return end
+        local bp = lp:FindFirstChildOfClass("Backpack")
+        if not bp then return end
+        
+        local tool = Instance.new("Tool")
+        tool.Name = "Teleport"
+        tool.RequiresHandle = false
+        tool.CanBeDropped = false
+        
+        local clickConn = nil
+        local mouse = lp:GetMouse()
+        local UIS = game:GetService("UserInputService")
+        
+        tool.Equipped:Connect(function()
+            if clickConn then clickConn:Disconnect() end
+            clickConn = UIS.InputBegan:Connect(function(input, gpe)
+                if gpe then return end
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    local char = lp.Character
+                    if not char then return end
+                    local hrp = char:FindFirstChild("HumanoidRootPart")
+                    if not hrp then return end
+                    
+                    local targetPos = mouse.Hit.Position
+                    local dest = CFrame.new(targetPos + Vector3.new(0, 3.5, 0))
+                    
+                    -- Stream in background so it doesn't yield/block the teleport
+                    task.spawn(function()
+                        pcall(function() lp:RequestStreamAroundAsync(targetPos, 5) end)
+                    end)
+                    
+                    local ok = pcall(function() char:PivotTo(dest) end)
+                    if not ok then pcall(function() hrp.CFrame = dest end) end
+                end
+            end)
+        end)
+        
+        tool.Unequipped:Connect(function()
+            if clickConn then clickConn:Disconnect(); clickConn = nil end
+        end)
+        
+        tool.AncestryChanged:Connect(function()
+            if not tool:IsDescendantOf(game) then
+                if clickConn then clickConn:Disconnect(); clickConn = nil end
+            end
+        end)
+        
+        tpTools[tool] = true
+        tool.Parent = bp
     end)
 end
 
@@ -1493,6 +1662,24 @@ do local s = Pages["Extras"]
         if setclipboard then
             setclipboard("https://discord.gg/XafCedTnp")
         end
+    end)
+
+    mkButton(s, "Kill Character", "Force resets your character.", "Kill", function()
+        local lp = game:GetService("Players").LocalPlayer
+        local char = lp.Character
+        if char then
+            local hum = char:FindFirstChildOfClass("Humanoid")
+            if hum then
+                hum.Health = 0
+            else
+                char:BreakJoints()
+            end
+        end
+    end)
+
+    mkButton(s, "Kick Yourself", "Instantly disconnects you from the game.", "Kick", function()
+        local lp = game:GetService("Players").LocalPlayer
+        if lp then lp:Kick("You have kicked yourself from the game.") end
     end)
 
     local antiKickConn = nil
@@ -1562,6 +1749,8 @@ do local s = Pages["Extras"]
     mkSection(s, "Statistics")
     mkStatsCard(s)
 end
+
+
 
 -- ═══════════════════════════════════════
 --  FLOATING PILL BUTTON
@@ -1701,54 +1890,4 @@ function BstlarGui.AddButton (tab,...) return mkButton (Pages[tab],...) end
 function BstlarGui.AddStatsCard(tab)   return mkStatsCard(Pages[tab])   end
 function BstlarGui.AddTab    (ico,lb)  return makeTab  (ico,lb)         end
 
--- ═══════════════════════════════════════
---  STARTUP WARNING
--- ═══════════════════════════════════════
-local warnFrame = Instance.new("Frame")
-warnFrame.Name = "ReloadWarning"
-warnFrame.Size = UDim2.new(0, 420, 0, 36)
-warnFrame.AnchorPoint = Vector2.new(1, 1)
-warnFrame.Position = UDim2.new(1, -20, 1, -20)
-warnFrame.BackgroundColor3 = C.Card
-warnFrame.BackgroundTransparency = 0.05
-warnFrame.Parent = SG
-
-local corner = Instance.new("UICorner", warnFrame)
-corner.CornerRadius = UDim.new(0, 8)
-
-local stroke = Instance.new("UIStroke", warnFrame)
-stroke.Color = C.Border
-stroke.Thickness = 1
-
-local warnStrip = Instance.new("Frame")
-warnStrip.Size = UDim2.new(0, 3, 0.6, 0)
-warnStrip.Position = UDim2.new(0, 0, 0.2, 0)
-warnStrip.BackgroundColor3 = C.Accent
-warnStrip.BorderSizePixel = 0
-warnStrip.Parent = warnFrame
-local stripCorner = Instance.new("UICorner", warnStrip)
-stripCorner.CornerRadius = UDim.new(0, 2)
-
-local warnLbl = Instance.new("TextLabel")
-warnLbl.Size = UDim2.new(1, -26, 1, 0)
-warnLbl.Position = UDim2.new(0, 16, 0, 0)
-warnLbl.BackgroundTransparency = 1
-warnLbl.Text = "[!] Warning: Do not reload the script if you have toggles on to prevent things from breaking."
-warnLbl.TextColor3 = C.Text
-warnLbl.TextSize = 11
-warnLbl.Font = FK.Bold
-warnLbl.TextXAlignment = Enum.TextXAlignment.Left
-warnLbl.TextYAlignment = Enum.TextYAlignment.Center
-warnLbl.TextTruncate = Enum.TextTruncate.AtEnd
-warnLbl.Parent = warnFrame
-
-task.delay(10, function()
-    tw(warnFrame, {BackgroundTransparency = 1}, 1)
-    tw(stroke, {Transparency = 1}, 1)
-    tw(warnStrip, {BackgroundTransparency = 1}, 1)
-    tw(warnLbl, {TextTransparency = 1}, 1)
-    task.delay(1.1, function() warnFrame:Destroy() end)
-end)
-
 return BstlarGui
-
