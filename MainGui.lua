@@ -1,5 +1,5 @@
 -- ╔══════════════════════════════════════════════╗
--- ║              BstlarGui  v0.1                  ║
+-- ║              BstlarGui  v0.3r                 ║
 -- ╚══════════════════════════════════════════════╝
 
 local UIS = game:GetService("UserInputService")
@@ -345,7 +345,7 @@ mkL(TBar, "@bstlarscript",
 local Bdg = mkF(TBar, UDim2.new(0,96,0,24), UDim2.new(0,218,0.5,-12), C.AccentMid, "Badge", 13)
 rnd(Bdg, 12)
 strk(Bdg, C.AccentBrt, 1)
-mkL(Bdg, "v0.2r",
+mkL(Bdg, "v0.3r",
     UDim2.new(1,0,1,0), UDim2.new(0,0,0,0),
     C.White, 11, FK.Black, "BdgTxt", Enum.TextXAlignment.Center, 14)
 
@@ -1441,6 +1441,341 @@ do local s = Pages["Main"]
             end
         end
     end)
+
+    -- ── Combat section ────────────────────────────────────────────
+    mkSection(s, "Combat")
+
+    local aimbotOn = false
+    local aimTargetPlayers = false
+    local aimTargetMonsters = false
+    local aimPart = "Head"
+    local aimSmoothness = 1
+    local aimUseFOV = false
+    local aimFOVRadius = 150
+    local aimShowFOV = false
+    local aimWallCheck = false
+    local aimTeamCheck = false
+    local aimHoldKey = false
+    local autoEscapeOnDamage = false
+
+    local autoshootOn = false
+    local autoshootDelay = 0.1
+    local lastShotTime = 0
+    local lastAmmoWarnTime = 0
+
+    local currentTarget = nil
+    local combatLoopConn = nil
+
+    local fovGuiCircle = mkF(SG, UDim2.new(0, 300, 0, 300), UDim2.new(0.5, -150, 0.5, -150), C.Accent, "FOVCircleGui", 999)
+    fovGuiCircle.BackgroundTransparency = 1
+    fovGuiCircle.Visible = false
+    rnd(fovGuiCircle, 150)
+    local fovStrk = strk(fovGuiCircle, C.Accent, 1.5)
+    fovStrk.Transparency = 0.3
+
+    local function updateFOVCircle()
+        if aimShowFOV and (aimbotOn or autoshootOn or aimShowFOV) then
+            fovGuiCircle.Size = UDim2.new(0, aimFOVRadius * 2, 0, aimFOVRadius * 2)
+            local mousePos = UIS:GetMouseLocation()
+            fovGuiCircle.Position = UDim2.new(0, mousePos.X - aimFOVRadius, 0, mousePos.Y - aimFOVRadius)
+            fovGuiCircle.Visible = true
+        else
+            fovGuiCircle.Visible = false
+        end
+    end
+
+    local function isTargetValid(targetPart)
+        if not targetPart or not targetPart.Parent then return false end
+        local char = targetPart.Parent
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if hum and hum.Health <= 0 then return false end
+        
+        local camera = workspace.CurrentCamera
+        local screenPos, onScreen = camera:WorldToViewportPoint(targetPart.Position)
+        if not onScreen then return false end
+        
+        if aimUseFOV then
+            local mousePos = UIS:GetMouseLocation()
+            local dist = (Vector2.new(screenPos.X, screenPos.Y) - mousePos).Magnitude
+            if dist > aimFOVRadius then return false end
+        end
+        
+        if aimWallCheck then
+            local origin = camera.CFrame.Position
+            local dir = (targetPart.Position - origin)
+            local params = RaycastParams.new()
+            params.FilterType = Enum.RaycastFilterType.Exclude
+            local lp = Players.LocalPlayer
+            local ignoreList = {lp.Character}
+            params.FilterDescendantsInstances = ignoreList
+            
+            local rayResult = workspace:Raycast(origin, dir, params)
+            if rayResult and not rayResult.Instance:IsDescendantOf(char) then
+                return false
+            end
+        end
+        
+        return true
+    end
+
+    local function getClosestTarget()
+        if currentTarget and isTargetValid(currentTarget) then
+            return currentTarget
+        end
+        
+        local camera = workspace.CurrentCamera
+        if not camera then return nil end
+        
+        local mousePos = UIS:GetMouseLocation()
+        local closestTargetPart = nil
+        local shortestDist = aimUseFOV and aimFOVRadius or math.huge
+        local lp = Players.LocalPlayer
+        local lChar = lp and lp.Character
+        
+        local candidates = {}
+        if aimTargetPlayers then
+            for _, p in ipairs(Players:GetPlayers()) do
+                if p ~= lp and p.Character then
+                    if not (aimTeamCheck and lp.Team and p.Team and lp.Team == p.Team) then
+                        table.insert(candidates, p.Character)
+                    end
+                end
+            end
+        end
+        
+        if aimTargetMonsters then
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v:IsA("Model") and not Players:GetPlayerFromCharacter(v) then
+                    if isMonster(v) then
+                        table.insert(candidates, v)
+                    end
+                end
+            end
+        end
+        
+        for _, char in ipairs(candidates) do
+            local hum = char:FindFirstChildOfClass("Humanoid")
+            if hum and hum.Health <= 0 then continue end
+            
+            local targetPart = char:FindFirstChild(aimPart)
+            if not targetPart then targetPart = char.PrimaryPart or char:FindFirstChild("Head") or char:FindFirstChild("HumanoidRootPart") end
+            if not targetPart then targetPart = char:FindFirstChildWhichIsA("BasePart") end
+            
+            if targetPart then
+                local screenPos, onScreen = camera:WorldToViewportPoint(targetPart.Position)
+                if onScreen then
+                    local distToMouse = (Vector2.new(screenPos.X, screenPos.Y) - mousePos).Magnitude
+                    if distToMouse <= shortestDist then
+                        if aimWallCheck then
+                            local origin = camera.CFrame.Position
+                            local dir = (targetPart.Position - origin)
+                            local params = RaycastParams.new()
+                            params.FilterType = Enum.RaycastFilterType.Exclude
+                            local ignoreList = {lChar}
+                            if lChar then table.insert(ignoreList, lChar) end
+                            params.FilterDescendantsInstances = ignoreList
+                            
+                            local rayResult = workspace:Raycast(origin, dir, params)
+                            if rayResult and not rayResult.Instance:IsDescendantOf(char) then
+                                continue
+                            end
+                        end
+                        shortestDist = distToMouse
+                        closestTargetPart = targetPart
+                    end
+                end
+            end
+        end
+        return closestTargetPart
+    end
+
+    local function triggerShoot()
+        local now = tick()
+        if now - lastShotTime < autoshootDelay then return end
+        lastShotTime = now
+        
+        local lp = Players.LocalPlayer
+        local char = lp and lp.Character
+        
+        if mouse1click then
+            pcall(function() mouse1click() end)
+        elseif mouse1press and mouse1release then
+            pcall(function() mouse1press(); task.wait(0.01); mouse1release() end)
+        end
+        
+        if char then
+            local tool = char:FindFirstChildOfClass("Tool")
+            if tool then
+                local ammo = tool:FindFirstChild("Ammo") or tool:FindFirstChild("Clip") or tool:FindFirstChild("CurrentAmmo")
+                if ammo and type(ammo.Value) == "number" and ammo.Value <= 0 then
+                    if now - lastAmmoWarnTime > 5 then
+                        lastAmmoWarnTime = now
+                        game:GetService("StarterGui"):SetCore("SendNotification", {
+                            Title = "BstlarGui",
+                            Text = "Warning: Your equipped tool is out of Ammo!",
+                            Duration = 3,
+                        })
+                    end
+                end
+                pcall(function() tool:Activate() end)
+            end
+        end
+        
+        pcall(function()
+            local vu = game:GetService("VirtualUser")
+            vu:Button1Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+            task.wait(0.02)
+            vu:Button1Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+        end)
+    end
+
+    local function updateCombatLoop(dt)
+        updateFOVCircle()
+        
+        if aimbotOn then
+            if aimHoldKey and not UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
+                currentTarget = nil
+            else
+                currentTarget = getClosestTarget()
+                if currentTarget then
+                    local camera = workspace.CurrentCamera
+                    if camera then
+                        local targetCFrame = CFrame.new(camera.CFrame.Position, currentTarget.Position)
+                        if aimSmoothness <= 1 then
+                            camera.CFrame = targetCFrame
+                        else
+                            local alpha = math.clamp((dt or 0.016) * (101 - aimSmoothness) * 0.5, 0.01, 1)
+                            camera.CFrame = camera.CFrame:Lerp(targetCFrame, alpha)
+                        end
+                    end
+                end
+            end
+        else
+            currentTarget = nil
+        end
+        
+        if autoshootOn then
+            if currentTarget then
+                triggerShoot()
+            else
+                local camera = workspace.CurrentCamera
+                if camera then
+                    local origin = camera.CFrame.Position
+                    local dir = camera.CFrame.LookVector * 1000
+                    local params = RaycastParams.new()
+                    params.FilterType = Enum.RaycastFilterType.Exclude
+                    local lp = Players.LocalPlayer
+                    if lp and lp.Character then
+                        params.FilterDescendantsInstances = {lp.Character}
+                    end
+                    local res = workspace:Raycast(origin, dir, params)
+                    if res and res.Instance then
+                        local hitModel = res.Instance:FindFirstAncestorOfClass("Model")
+                        if hitModel then
+                            local isPlr = Players:GetPlayerFromCharacter(hitModel)
+                            if (isPlr and aimTargetPlayers and isPlr ~= lp) or (aimTargetMonsters and isMonster(hitModel)) then
+                                triggerShoot()
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    local lpHealthConn = nil
+    local function hookHealth()
+        if lpHealthConn then lpHealthConn:Disconnect() end
+        local char = Players.LocalPlayer.Character
+        if char then
+            local hum = char:WaitForChild("Humanoid", 3)
+            if hum then
+                local lastHealth = hum.Health
+                lpHealthConn = hum.HealthChanged:Connect(function(newH)
+                    if newH < lastHealth then
+                        if autoEscapeOnDamage then
+                            local dest = char:GetPivot() * CFrame.new(math.random(-50, 50), 100, math.random(-50, 50))
+                            pcall(function() char:PivotTo(dest) end)
+                        end
+                        if aimbotOn then
+                            local nearest = nil
+                            local minDist = math.huge
+                            local candidates = {}
+                            if aimTargetPlayers then
+                                for _, p in ipairs(Players:GetPlayers()) do
+                                    if p ~= Players.LocalPlayer and p.Character then table.insert(candidates, p.Character) end
+                                end
+                            end
+                            if aimTargetMonsters then
+                                for _, v in ipairs(workspace:GetDescendants()) do
+                                    if v:IsA("Model") and not Players:GetPlayerFromCharacter(v) and isMonster(v) then
+                                        table.insert(candidates, v)
+                                    end
+                                end
+                            end
+                            
+                            for _, c in ipairs(candidates) do
+                                local chum = c:FindFirstChildOfClass("Humanoid")
+                                if chum and chum.Health > 0 then
+                                    local tp = c:FindFirstChild(aimPart) or c.PrimaryPart
+                                    if tp then
+                                        local dist = (tp.Position - char:GetPivot().Position).Magnitude
+                                        if dist < minDist then
+                                            minDist = dist
+                                            nearest = tp
+                                        end
+                                    end
+                                end
+                            end
+                            
+                            if nearest then
+                                currentTarget = nearest
+                            end
+                        end
+                    end
+                    lastHealth = newH
+                end)
+            end
+        end
+    end
+    Players.LocalPlayer.CharacterAdded:Connect(hookHealth)
+    task.spawn(hookHealth)
+
+    local function toggleCombatLoop()
+        if aimbotOn or autoshootOn or aimShowFOV then
+            if not combatLoopConn then
+                combatLoopConn = RUN.RenderStepped:Connect(updateCombatLoop)
+            end
+        else
+            if combatLoopConn then
+                combatLoopConn:Disconnect()
+                combatLoopConn = nil
+            end
+            if fovGuiCircle then fovGuiCircle.Visible = false end
+        end
+    end
+
+    mkToggle(s, "Aimbot", "Automatically aims at the closest target.", function(on) aimbotOn = on; toggleCombatLoop() end)
+    mkToggle(s, "Target Players", "Aimbot and Autoshoot will target other players.", function(on) aimTargetPlayers = on end)
+    mkToggle(s, "Target Monsters", "Aimbot and Autoshoot will target moving monsters.", function(on) aimTargetMonsters = on end)
+    
+    mkDropdown(s, "Aim Part", "Which part to aim at.", function() return {"Head", "HumanoidRootPart", "Torso"} end, function(sel)
+        aimPart = sel
+    end)
+    
+    mkSlider(s, "Smoothness", "Aim smoothing. 1 = Instant, higher = smoother.", 1, 100, 1, function(v) aimSmoothness = v end)
+    
+    mkToggle(s, "Use FOV", "Only aim at targets within the FOV circle.", function(on) aimUseFOV = on end)
+    mkSlider(s, "FOV Radius", "Radius of the FOV circle.", 20, 500, 150, function(v) aimFOVRadius = v; updateFOVCircle() end)
+    mkToggle(s, "Show FOV Circle", "Draws a circle around the mouse.", function(on) aimShowFOV = on; toggleCombatLoop() end)
+    
+    mkToggle(s, "Wall Check", "Only aim at visible targets.", function(on) aimWallCheck = on end)
+    mkToggle(s, "Team Check", "Ignore players on the same team.", function(on) aimTeamCheck = on end)
+    mkToggle(s, "Hold Right Click", "Only aim when holding Right Click.", function(on) aimHoldKey = on end)
+    mkToggle(s, "Auto Escape on Damage", "Teleports you randomly if you take damage.", function(on) autoEscapeOnDamage = on end)
+    
+    mkToggle(s, "Autoshoot", "Automatically clicks/activates tool when aiming at target.", function(on) autoshootOn = on; toggleCombatLoop() end)
+    mkSlider(s, "Shoot Delay", "Delay between shots (x100 for seconds, e.g. 10 = 0.1s).", 1, 50, 10, function(v) autoshootDelay = v / 100 end)
 
     -- ── Movement section ──────────────────────────────────────────
     mkSection(s, "Movement")
