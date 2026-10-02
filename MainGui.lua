@@ -9,15 +9,19 @@ local RUN = game:GetService("RunService")
 -- CoreGui first (executor compat), fallback to PlayerGui
 -- Test actual write access, not just service access
 local GParent
-pcall(function()
-    local cg = game:GetService("CoreGui")
-    local t = Instance.new("Frame")
-    t.Parent = cg   -- this errors in LocalScript context
-    t:Destroy()
-    GParent = cg
-end)
-if not GParent then
-    GParent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+if gethui then
+    GParent = gethui()
+else
+    pcall(function()
+        local cg = game:GetService("CoreGui")
+        local t = Instance.new("Frame")
+        t.Parent = cg   -- this errors in LocalScript context
+        t:Destroy()
+        GParent = cg
+    end)
+    if not GParent then
+        GParent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    end
 end
 
 -- Destroy any existing instance so re-running doesn't conflict
@@ -155,6 +159,7 @@ end
 local SG = Instance.new("ScreenGui")
 SG.Name = "BstlarGui"
 SG.ResetOnSpawn = false
+SG.IgnoreGuiInset = true
 SG.ZIndexBehavior = Enum.ZIndexBehavior.Global
 SG.Parent = GParent
 
@@ -166,6 +171,7 @@ local TITLE_H        = 52
 local SIDE_W         = 150
 local CanDragGUI     = true
 local CanDragPill    = true
+local Pill, PW, PH
 
 -- ═══════════════════════════════════════
 --  THEME ENGINE
@@ -906,12 +912,34 @@ task.defer(finalizeGlobal)
 actMain()
 
 do local s = Pages["Main"]
-    -- ── Loop Speed state ──────────────────────────────────────────
+    -- ── DISCONTINUED NOTICE ───────────────────────────────────────
+    do
+        local NCard = mkF(s, UDim2.new(1,0,0,70), nil, Color3.fromRGB(60, 28, 28), "DiscontinuedNotice", 15)
+        rnd(NCard, 9)
+        local ns = Instance.new("UIStroke")
+        ns.Color = Color3.fromRGB(180, 60, 60); ns.Thickness = 1; ns.Parent = NCard
+        mkL(NCard, "⚠️  DISCONTINUED",
+            UDim2.new(1,-20,0,22), UDim2.new(0,12,0,8),
+            Color3.fromRGB(255, 120, 120), 13, FK.Bold, "NTitle", Enum.TextXAlignment.Left, 16)
+        local nb = mkL(NCard, "BstlarGui is no longer maintained. This is the final release — no further updates.",
+            UDim2.new(1,-20,0,32), UDim2.new(0,12,0,30),
+            Color3.fromRGB(210, 160, 160), 11, FK.Reg, "NBody", Enum.TextXAlignment.Left, 16)
+        nb.TextWrapped = true
+    end
+
+    -- ── Loop Speed & Jump state ───────────────────────────────────
     local loopSpeedConn = nil
+    local loopSpeedBypassConn = nil
     local fixSpeedConn  = nil
     local loopSpeed     = 50
+    local infJumpConn   = nil
+    local loopJumpConn  = nil
+    local loopJump      = 50
     table.insert(unloadCallbacks, function()
         if fixSpeedConn then fixSpeedConn:Disconnect(); fixSpeedConn = nil end
+        if loopSpeedBypassConn then loopSpeedBypassConn:Disconnect(); loopSpeedBypassConn = nil end
+        if infJumpConn then infJumpConn:Disconnect(); infJumpConn = nil end
+        if loopJumpConn then loopJumpConn:Disconnect(); loopJumpConn = nil end
     end)
 
     local function getHum()
@@ -944,6 +972,32 @@ do local s = Pages["Main"]
         end
     end)
 
+    mkToggle(s, "Loop Speed Bypass", "CFrame-based speed bypass for strict anti-cheats.", function(on)
+        if on then
+            if loopSpeedBypassConn then loopSpeedBypassConn:Disconnect(); loopSpeedBypassConn = nil end
+            local lp = game:GetService("Players").LocalPlayer
+            loopSpeedBypassConn = RUN.RenderStepped:Connect(function(dt)
+                local char = lp.Character
+                if char then
+                    local hum = char:FindFirstChildOfClass("Humanoid")
+                    local root = char:FindFirstChild("HumanoidRootPart")
+                    if hum and root and hum.Health > 0 and hum.MoveDirection.Magnitude > 0 then
+                        local targetSpeed = loopSpeed == 0 and 16 or loopSpeed
+                        local speedMultiplier = (targetSpeed - 16) * dt
+                        if speedMultiplier > 0 then
+                            root.CFrame = root.CFrame + (hum.MoveDirection * speedMultiplier)
+                        end
+                    end
+                end
+            end)
+        else
+            if loopSpeedBypassConn then
+                loopSpeedBypassConn:Disconnect()
+                loopSpeedBypassConn = nil
+            end
+        end
+    end)
+
     -- Slider: 0–100, default 50 (16 is Roblox default, 50 is a nice jog)
     local _, setWalkSpeed = mkSlider(s, "Walk Speed", "Target WalkSpeed applied by the loop. Roblox default is 16.", 0, 100, 50, function(v)
         loopSpeed = v
@@ -973,6 +1027,72 @@ do local s = Pages["Main"]
                 local hum = getHum()
                 if hum then hum.WalkSpeed = 16 end
             end)
+        end)
+    end)
+
+    -- ── Jump ──────────────────────────────────────────────────────
+    mkSection(s, "Jump")
+
+    mkToggle(s, "Infinite Jump", "Allows you to jump infinitely in mid-air.", function(on)
+        if on then
+            if infJumpConn then infJumpConn:Disconnect(); infJumpConn = nil end
+            infJumpConn = UIS.InputBegan:Connect(function(input, gpe)
+                if gpe then return end
+                if input.KeyCode == Enum.KeyCode.Space then
+                    local hum = getHum()
+                    if hum then
+                        hum:ChangeState(Enum.HumanoidStateType.Jumping)
+                    end
+                end
+            end)
+        else
+            if infJumpConn then
+                infJumpConn:Disconnect()
+                infJumpConn = nil
+            end
+        end
+    end)
+
+    mkToggle(s, "Loop Jump Power", "Bypasses server JumpPower resets by re-applying every frame.", function(on)
+        if on then
+            if loopJumpConn then loopJumpConn:Disconnect(); loopJumpConn = nil end
+            loopJumpConn = RUN.Heartbeat:Connect(function()
+                local hum = getHum()
+                if hum then
+                    hum.UseJumpPower = true
+                    hum.JumpPower = loopJump
+                end
+            end)
+        else
+            if loopJumpConn then
+                loopJumpConn:Disconnect()
+                loopJumpConn = nil
+            end
+            pcall(function()
+                local hum = getHum()
+                if hum then hum.JumpPower = 50 end
+            end)
+        end
+    end)
+
+    local _, setJumpPower = mkSlider(s, "Jump Boost", "Target JumpPower applied by the loop. Roblox default is 50.", 0, 200, 50, function(v)
+        loopJump = v
+        if loopJumpConn then
+            pcall(function()
+                local hum = getHum()
+                if hum then
+                    hum.UseJumpPower = true
+                    hum.JumpPower = loopJump
+                end
+            end)
+        end
+    end)
+
+    mkButton(s, "Reset Jump", "Instantly restores your JumpPower to the Roblox default (50).", "Reset", function()
+        setJumpPower(50)
+        pcall(function()
+            local hum = getHum()
+            if hum then hum.JumpPower = 50 end
         end)
     end)
 
@@ -1148,8 +1268,12 @@ do local s = Pages["Main"]
     -- distance. A single 0.1 s Heartbeat loop refreshes all active labels.
     local espInfoConn = nil
 
+    local function getRoot(model)
+        return model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart", true)
+    end
+
     createESPInfo = function(model)
-        local hrp = model:FindFirstChild("HumanoidRootPart")
+        local hrp = getRoot(model)
         if not hrp then return end
         if hrp:FindFirstChild("BstlarESPInfo") then return end
 
@@ -1201,10 +1325,10 @@ do local s = Pages["Main"]
     end
 
     removeESPInfo = function(model)
-        local hrp = model:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            local info = hrp:FindFirstChild("BstlarESPInfo")
-            if info then info:Destroy() end
+        for _, desc in ipairs(model:GetDescendants()) do
+            if desc:IsA("BillboardGui") and desc.Name == "BstlarESPInfo" then
+                desc:Destroy()
+            end
         end
         activeESPInfos[model] = nil
     end
@@ -1214,7 +1338,7 @@ do local s = Pages["Main"]
             activeESPInfos[model] = nil
             return
         end
-        local hrp = model:FindFirstChild("HumanoidRootPart")
+        local hrp = getRoot(model)
         if not hrp then return end
         local bb = hrp:FindFirstChild("BstlarESPInfo")
         if not bb then return end
@@ -1228,7 +1352,15 @@ do local s = Pages["Main"]
         if nl then nl.Text = model.Name end
         if pl then
             local p = hrp.Position
-            pl.Text = string.format("Pos  %.0f, %.0f, %.0f", p.X, p.Y, p.Z)
+            local dist = 0
+            local lp = game:GetService("Players").LocalPlayer
+            if lp.Character then
+                local lroot = lp.Character:FindFirstChild("HumanoidRootPart") or lp.Character.PrimaryPart
+                if lroot then
+                    dist = (p - lroot.Position).Magnitude
+                end
+            end
+            pl.Text = string.format("Dist  %.0f studs", dist)
         end
         if sl then
             local spd = 0
@@ -1333,11 +1465,59 @@ do local s = Pages["Main"]
 
     local function isMonster(v)
         if not v:IsA("Model") then return false end
-        local hum = v:FindFirstChildOfClass("Humanoid")
-        if not hum then return false end
-        if hum.Health <= 0 then return false end
         if Players:GetPlayerFromCharacter(v) then return false end
-        return true
+        
+        -- Ignore player carried items
+        if v.Parent and v.Parent:IsA("Model") and Players:GetPlayerFromCharacter(v.Parent) then return false end
+        if v.Parent and v.Parent:IsA("Accessory") then return false end
+
+        local nameLower = string.lower(v.Name)
+        if string.find(nameLower, "door") then return false end
+        
+        -- Ignore generic un-renamed models
+        if nameLower == "model" then return false end
+        
+        -- Determine if the model is stationary (anchored)
+        local rootPart = v.PrimaryPart or v:FindFirstChild("HumanoidRootPart") or v:FindFirstChildWhichIsA("BasePart")
+        local isAnchored = rootPart and rootPart.Anchored
+
+        -- Standard Humanoid check
+        local hum = v:FindFirstChildOfClass("Humanoid")
+        if hum then
+            if hum.Health <= 0 then return false end
+            if isAnchored then return false end
+            return true
+        end
+        
+        -- Check for common horror names
+        local horrorNames = {"monster", "killer", "zombie", "enemy", "bot", "piggy", "nextbot", "npc", "boss"}
+        for _, hn in ipairs(horrorNames) do
+            if string.find(nameLower, hn) then 
+                if isAnchored then return false end
+                return true 
+            end
+        end
+        
+        -- Anything past here must be moving (unanchored) to be considered a monster
+        if isAnchored then return false end
+        
+        -- Detect custom rigged entities via AnimationController
+        if v:FindFirstChildOfClass("AnimationController") then return true end
+        
+        -- Detect 2D image based nextbots (Usually 1-3 parts with an image)
+        local numParts = 0
+        for _, c in ipairs(v:GetChildren()) do
+            if c:IsA("BasePart") then numParts = numParts + 1 end
+        end
+        if numParts > 0 and numParts <= 3 then
+            for _, desc in ipairs(v:GetDescendants()) do
+                if desc:IsA("Decal") or desc:IsA("Texture") or (desc:IsA("BillboardGui") and desc:FindFirstChildWhichIsA("ImageLabel", true)) then
+                    return true
+                end
+            end
+        end
+
+        return false
     end
 
     local function mespApply(v)
@@ -1358,11 +1538,15 @@ do local s = Pages["Main"]
             end
             -- Watch for newly added descendants (spawns / respawns)
             mespDescConn = workspace.DescendantAdded:Connect(function(desc)
-                -- When a Humanoid is added, check its parent Model
-                if desc:IsA("Humanoid") then
-                    local model = desc.Parent
-                    if model and isMonster(model) then
-                        task.wait()  -- 1 frame for health/state to settle
+                if desc:IsA("Model") then
+                    task.wait(0.1)
+                    if monsterESPOn and isMonster(desc) then
+                        createESP(desc, ESP_COLOR_MONSTER)
+                    end
+                elseif desc:IsA("Humanoid") or desc:IsA("AnimationController") or desc:IsA("Decal") or desc:IsA("Texture") or desc:IsA("BillboardGui") then
+                    local model = desc:FindFirstAncestorOfClass("Model")
+                    if model then
+                        task.wait(0.1)
                         if monsterESPOn and isMonster(model) then
                             createESP(model, ESP_COLOR_MONSTER)
                         end
@@ -1378,15 +1562,10 @@ do local s = Pages["Main"]
                 mespNextSweep = tick() + 3
                 for _, v in ipairs(workspace:GetDescendants()) do
                     if v:IsA("Model") and not Players:GetPlayerFromCharacter(v) then
-                        local hum = v:FindFirstChildOfClass("Humanoid")
-                        if hum then
-                            if hum.Health > 0 then
-                                -- alive monster - ensure ESP exists
-                                createESP(v, ESP_COLOR_MONSTER)
-                            else
-                                -- dead - remove ESP
-                                removeESP(v)
-                            end
+                        if isMonster(v) then
+                            createESP(v, ESP_COLOR_MONSTER)
+                        else
+                            removeESP(v)
                         end
                     end
                 end
@@ -1780,6 +1959,65 @@ do local s = Pages["Main"]
     -- ── Movement section ──────────────────────────────────────────
     mkSection(s, "Movement")
     
+    mkToggle(s, "Infinite Jump", "Allows you to jump infinitely in mid-air.", function(on)
+        if on then
+            if infJumpConn then infJumpConn:Disconnect(); infJumpConn = nil end
+            infJumpConn = UIS.InputBegan:Connect(function(input, gpe)
+                if gpe then return end
+                if input.KeyCode == Enum.KeyCode.Space then
+                    local plr = game:GetService("Players").LocalPlayer
+                    local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid")
+                    if hum then
+                        hum:ChangeState(Enum.HumanoidStateType.Jumping)
+                    end
+                end
+            end)
+        else
+            if infJumpConn then
+                infJumpConn:Disconnect()
+                infJumpConn = nil
+            end
+        end
+    end)
+
+    mkToggle(s, "Loop Jump Power", "Bypasses server JumpPower resets.", function(on)
+        if on then
+            if loopJumpConn then loopJumpConn:Disconnect(); loopJumpConn = nil end
+            loopJumpConn = RUN.Heartbeat:Connect(function()
+                local plr = game:GetService("Players").LocalPlayer
+                local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid")
+                if hum then
+                    hum.UseJumpPower = true
+                    hum.JumpPower = loopJump
+                end
+            end)
+        else
+            if loopJumpConn then
+                loopJumpConn:Disconnect()
+                loopJumpConn = nil
+            end
+            pcall(function()
+                local plr = game:GetService("Players").LocalPlayer
+                local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid")
+                if hum then hum.JumpPower = 50 end
+            end)
+        end
+    end)
+
+    mkSlider(s, "Jump Boost", "Target JumpPower applied by the loop.", 0, 200, 50, function(v)
+        loopJump = v
+        if loopJumpConn then
+            pcall(function()
+                local plr = game:GetService("Players").LocalPlayer
+                local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid")
+                if hum then
+                    hum.UseJumpPower = true
+                    hum.JumpPower = loopJump
+                end
+            end)
+        end
+    end)
+    
     local flySpeed = 50
     local flying = false
     local flyBg, flyBv
@@ -1991,6 +2229,120 @@ do local s = Pages["Extras"]
         olCorner = (olCorner % 4) + 1
         updateOverlayLayout()
     end)
+    mkSection(s, "Theme Options")
+    local selectedTheme = "Frutiger Aero"
+    mkDropdown(s, "Select Theme", "Choose a theme to apply.", function() return {"Frutiger Aero", "Default"} end, function(sel)
+        selectedTheme = sel
+    end)
+    mkToggle(s, "Enable Custom Theme", "Turns on the selected theme.", function(on)
+        local themeName = on and selectedTheme or "Default"
+        
+        -- Always remove previous gradients
+        for _, obj in ipairs(SG:GetDescendants()) do
+            if obj.Name == "AeroGradient" then obj:Destroy() end
+        end
+
+        if themeName == "Frutiger Aero" then
+            C.WinBg      = Color3.fromRGB(255, 255, 255)
+            C.TitleBg    = Color3.fromRGB(255, 255, 255)
+            C.SideBG     = Color3.fromRGB(255, 255, 255)
+            C.BodyBg     = Color3.fromRGB(255, 255, 255)
+            C.Card       = Color3.fromRGB(255, 255, 255)
+            C.CardHov    = Color3.fromRGB(255, 255, 255)
+            C.Sep        = Color3.fromRGB(200, 220, 240)
+            C.Border     = Color3.fromRGB(160, 190, 220)
+            C.Accent     = Color3.fromRGB(60, 140, 220)
+            C.AccentMid  = Color3.fromRGB(80, 160, 240)
+            C.AccentBrt  = Color3.fromRGB(100, 180, 255)
+            C.AccentDim  = Color3.fromRGB(40, 110, 190)
+            C.AccentGlow = Color3.fromRGB(120, 200, 255)
+            C.Text       = Color3.fromRGB(20, 40, 60)
+            C.TextSub    = Color3.fromRGB(80, 100, 120)
+            C.TogOn      = Color3.fromRGB(80, 200, 100)
+            C.TogOff     = Color3.fromRGB(200, 210, 220)
+            C.SldBg      = Color3.fromRGB(200, 210, 220)
+            C.SldFill    = Color3.fromRGB(60, 140, 220)
+            C.TabActive  = Color3.fromRGB(220, 235, 255)
+            
+            -- Apply Glass Transparencies
+            if Win then Win.BackgroundTransparency = 0.2 end
+            if TBar then TBar.BackgroundTransparency = 0.1 end
+            if Sidebar then Sidebar.BackgroundTransparency = 0.1 end
+            if Content then Content.BackgroundTransparency = 0.1 end
+
+            local function addGrad(p, t)
+                if not p then return end
+                local g = Instance.new("UIGradient")
+                g.Name = "AeroGradient"
+                g.Rotation = 90
+                if t == "Title" then
+                    g.Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)),
+                        ColorSequenceKeypoint.new(0.49, Color3.fromRGB(215, 235, 255)),
+                        ColorSequenceKeypoint.new(0.50, Color3.fromRGB(140, 190, 245)),
+                        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(170, 210, 255))
+                    })
+                elseif t == "Body" then
+                    g.Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0.00, Color3.fromRGB(230, 245, 255)),
+                        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(190, 220, 250))
+                    })
+                elseif t == "Card" then
+                    g.Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)),
+                        ColorSequenceKeypoint.new(0.49, Color3.fromRGB(245, 250, 255)),
+                        ColorSequenceKeypoint.new(0.50, Color3.fromRGB(225, 240, 255)),
+                        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(240, 248, 255))
+                    })
+                end
+                g.Parent = p
+            end
+            
+            addGrad(Win, "Body")
+            addGrad(TBar, "Title")
+            addGrad(Sidebar, "Body")
+            addGrad(Content, "Body")
+        else
+            for k, v in pairs(baseColors) do C[k] = v end
+            -- Restore default Opacity
+            if Win then Win.BackgroundTransparency = 0 end
+            if TBar then TBar.BackgroundTransparency = 0 end
+            if Sidebar then Sidebar.BackgroundTransparency = 0 end
+            if Content then Content.BackgroundTransparency = 0 end
+        end
+        
+        pcall(function() tw(Win, {BackgroundColor3 = C.WinBg}) end)
+        if TBar then pcall(function() tw(TBar, {BackgroundColor3 = C.TitleBg}) end) end
+        if Sidebar then pcall(function() tw(Sidebar, {BackgroundColor3 = C.SideBG}) end) end
+        if Content then pcall(function() tw(Content, {BackgroundColor3 = C.BodyBg}) end) end
+        
+        for _, obj in ipairs(SG:GetDescendants()) do
+            pcall(function()
+                if obj.Name:sub(1,4) == "Btn_" or obj.Name:sub(1,4) == "Tog_" or obj.Name:sub(1,4) == "Sld_" then
+                    tw(obj, {BackgroundColor3 = C.Card})
+                    if themeName == "Frutiger Aero" then
+                        -- Add gradient to card
+                        local g = Instance.new("UIGradient")
+                        g.Name = "AeroGradient"
+                        g.Rotation = 90
+                        g.Color = ColorSequence.new({
+                            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)),
+                            ColorSequenceKeypoint.new(0.49, Color3.fromRGB(245, 250, 255)),
+                            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(225, 240, 255)),
+                            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(240, 248, 255))
+                        })
+                        g.Parent = obj
+                    end
+                elseif obj.Name == "T" or obj.Name == "LTitle" then
+                    tw(obj, {TextColor3 = C.Text})
+                elseif obj.Name == "D" or obj.Name == "TLbl" then
+                    tw(obj, {TextColor3 = C.TextSub})
+                elseif obj.Name == "TabBtn" or obj:IsA("TextButton") and obj.Name:sub(1,4)=="Tab_" then
+                    tw(obj, {BackgroundColor3 = C.TabActive})
+                end
+            end)
+        end
+    end)
 
     mkSection(s, "Extra Options")
     mkButton (s, "Copy discord link", "Join our Discord server for the latest updates, scripts, and support.", "Copy", function()
@@ -2090,8 +2442,8 @@ end
 -- ═══════════════════════════════════════
 --  FLOATING PILL BUTTON
 -- ═══════════════════════════════════════
-local PW, PH = 208, 44
-local Pill = mkB(SG, "",
+PW, PH = 208, 44
+Pill = mkB(SG, "",
     UDim2.new(0, PW, 0, PH),
     UDim2.new(0.5, -PW/2, 0, 24),
     Color3.fromRGB(12, 9, 20), "PillBtn", 20)
@@ -2221,6 +2573,7 @@ tw(Shad, {Position=UDim2.new(0.5, 0, 0.5, -WIN_H/2 - 20), BackgroundTransparency
 local BstlarGui = {}
 function BstlarGui.AddSection(tab,...) return mkSection(Pages[tab],...) end
 function BstlarGui.AddSlider (tab,...) return mkSlider (Pages[tab],...) end
+function BstlarGui.AddToggle (tab,...) return mkToggle (Pages[tab],...) end
 function BstlarGui.AddButton (tab,...) return mkButton (Pages[tab],...) end
 function BstlarGui.AddStatsCard(tab)   return mkStatsCard(Pages[tab])   end
 function BstlarGui.AddTab    (ico,lb)  return makeTab  (ico,lb)         end
